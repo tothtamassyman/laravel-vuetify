@@ -13,5 +13,11 @@
         "postcss": "^8.4.47",
         "tailwindcss": "^3.4.13",
         "vite": "^6.0"
+    },
+    "dependencies": {
+        "@mdi/font": "^7.4.47",
+        "@vitejs/plugin-vue": "^5.2.1",
+        "vue": "^3.5.13",
+        "vuetify": "^3.7.6"
     }
 }
