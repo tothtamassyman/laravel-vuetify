@@ -1,4 +1,5 @@
 import axios from 'axios';
+import router from '@/router';
 
 const getToken = () => {
     const token = localStorage.getItem('token');
@@ -9,6 +10,10 @@ const logErrorInDevelopment = (error, context = 'Error') => {
     if (import.meta.env.MODE === 'development') {
         console.error(`[${context}]`, error);
     }
+};
+
+const isSameRoute = (route, path) => {
+    return route.path === path || route.matched.some((r) => r.path === path);
 };
 
 const axiosInstance = axios.create({
@@ -38,7 +43,7 @@ const defaultCodeMessages = {
 axiosInstance.interceptors.request.use(
     (config) => {
         const token = getToken();
-        if (token && /^[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+$/.test(token)) {
+        if (token && /^[A-Za-z0-9|]+$/.test(token)) {
             config.headers['Authorization'] = `Bearer ${token}`;
         } else {
             console.warn('No valid token found.');
@@ -79,7 +84,7 @@ const handleRequestError = (error) => {
     return Promise.reject(error);
 };
 
-const handleResponseError = (error) => {
+const handleResponseError = async (error) => {
     const message = error.response?.data?.message || defaultStatusMessages.default;
     const status = error.response?.status || null;
     const errors = error.response?.data?.errors || {};
@@ -120,8 +125,9 @@ const handleResponseError = (error) => {
 
             case 401:
                 localStorage.removeItem('token');
-                if (window.location.pathname !== '/login') {
-                    window.location.href = '/login';
+                const currentRoute = router.currentRoute.value;
+                if (!isSameRoute(currentRoute, '/login')) {
+                    await router.push({path: '/login'});
                 }
                 error.message = defaultStatusMessages[status];
                 break;
