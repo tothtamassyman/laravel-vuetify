@@ -21,6 +21,8 @@ return [
     'alpha' => 'A(z) :attribute kizárólag betűket tartalmazhat.',
     'alpha_dash' => 'A(z) :attribute kizárólag betűket, számokat és kötőjeleket tartalmazhat.',
     'alpha_num' => 'A(z) :attribute kizárólag betűket és számokat tartalmazhat.',
+    'and_more' => '{1} és további 1 hiba|[2,*] és további :count hiba',
+    'and_more_invalid_data' => 'A megadott adatok érvénytelenek.',
     'array' => 'A(z) :attribute egy tömb kell, hogy legyen.',
     'ascii' => 'A(z) :attribute mező csak egybájtos alfanumerikus karaktereket és szimbólumokat tartalmazhat.',
     'before' => 'A(z) :attribute :date előtti dátum kell, hogy legyen.',
@@ -189,6 +191,11 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'users' => [
+            'email' => 'E-mail cím',
+            'password' => 'Jelszó',
+        ],
+    ],
 
 ];
