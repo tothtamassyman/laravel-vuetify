@@ -1,17 +1,24 @@
 import './bootstrap';
 
-import { createApp } from 'vue';
-import { createPinia } from 'pinia';
+import {createApp} from 'vue';
+import {createPinia, setActivePinia} from 'pinia';
 import App from './App.vue';
 import vuetify from '@/plugins/vuetify';
-import axios from '@/plugins/axios';
-import router from "@/router/index";
+import router from '@/router/index';
+import initI18n from '@/plugins/i18n';
 
-const app = createApp(App);
+const pinia = createPinia();
+setActivePinia(pinia);
 
-app.config.globalProperties.$axios = axios;
+(async () => {
+    const i18n = await initI18n();
 
-app.use(vuetify)
-app.use(router)
-app.use(createPinia())
-app.mount('#app');
+    const app = createApp(App);
+
+    app.use(pinia);
+    app.use(router);
+    app.use(vuetify);
+    app.use(i18n);
+
+    app.mount('#app');
+})();
