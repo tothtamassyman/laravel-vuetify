@@ -87,7 +87,7 @@ const login = async () => {
                 email: email.value,
                 password: password.value,
             });
-            console.log('Login successful:', response);
+            console.log('Login successful');
         } catch (error) {
             console.error('Login error:', error);
             Object.assign(backendErrors, error.backendErrors || {});
@@ -97,10 +97,10 @@ const login = async () => {
         } finally {
             loading.value = false;
         }
+    } else {
+        setTimeout(() => {
+            loginForm?.value?.resetValidation();
+        }, backendErrorsTimeout.value);
     }
-
-    setTimeout(() => {
-        loginForm.value.resetValidation();
-    }, backendErrorsTimeout.value);
 };
 </script>
