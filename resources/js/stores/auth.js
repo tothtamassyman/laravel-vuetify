@@ -1,5 +1,6 @@
-import { defineStore } from 'pinia';
+import {defineStore} from 'pinia';
 import axios from '@/plugins/axios';
+import router from '@/router';
 
 export const useAuthStore = defineStore('auth', {
     state: () => ({
@@ -8,13 +9,32 @@ export const useAuthStore = defineStore('auth', {
     }),
 
     actions: {
+        setToken(token) {
+            this.token = token;
+            localStorage.setItem('token', token);
+            // axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        },
+
+        setUser(user) {
+            this.user = user;
+        },
+
+        clearAuth() {
+            this.setToken(null);
+            this.setUser(null);
+            localStorage.removeItem('token');
+            // delete axios.defaults.headers.common['Authorization'];
+        },
+
         async login(credentials) {
             try {
                 const response = await axios.post('/login', credentials);
-                this.user = response.data.user;
-                this.token = response.data.token;
+                this.setToken(response.data.token);
+                this.setUser(response.data.user);
 
-                localStorage.setItem('token', this.token);
+                await router.push({name: 'Dashboard'});
+
+                return response;
             } catch (error) {
                 console.error('Login failed:', error.message);
                 throw error;
@@ -23,11 +43,12 @@ export const useAuthStore = defineStore('auth', {
 
         async logout() {
             try {
-                await axios.post('/logout');
-                this.user = null;
-                this.token = null;
+                const response = await axios.post('/logout');
+                this.clearAuth();
 
-                localStorage.removeItem('token');
+                await router.push({name: 'Welcome'});
+
+                return response;
             } catch (error) {
                 console.error('Logout failed:', error.message);
                 throw error;
@@ -37,7 +58,7 @@ export const useAuthStore = defineStore('auth', {
         async fetchUser() {
             try {
                 const response = await axios.get('/user');
-                this.user = response.data;
+                this.setUser(response.data);
             } catch (error) {
                 console.error('Failed to fetch user:', error.response?.data);
                 throw error;
