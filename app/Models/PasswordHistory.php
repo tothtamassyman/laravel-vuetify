@@ -43,10 +43,53 @@ class PasswordHistory extends Model
     ];
 
     /**
+     * Boot the model and handle events.
+     *
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        // Handle the 'created' event
+        static::created(function ($passwordHistory) {
+            static::cleanUpHistory($passwordHistory->user_id);
+        });
+
+        // Handle the 'updated' event
+        static::updated(function ($passwordHistory) {
+            static::cleanUpHistory($passwordHistory->user_id);
+        });
+    }
+
+    /**
+     * Clean up old password histories for the given user ID.
+     *
+     * Keeps only the most recent N passwords based on the configuration.
+     *
+     * @param  int  $userId
+     * @return void
+     */
+    protected static function cleanUpHistory(int $userId): void
+    {
+        // Get the password history limit from the configuration
+        $historyLimit = config('auth.password_history_limit');
+
+        // Keep only the last N passwords for the user
+        static::where('user_id', $userId)
+            ->latest('created_at')
+            ->skip($historyLimit)
+            ->take(PHP_INT_MAX)
+            ->delete();
+    }
+
+    /**
      * Get the user that owns this password history record.
      *
      * Defines a belongs-to relationship, where each password history
      * entry is associated with a specific user.
+     *
+     * @return BelongsTo
      */
     public function user(): BelongsTo
     {
