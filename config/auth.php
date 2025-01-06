@@ -112,4 +112,18 @@ return [
 
     'password_timeout' => env('AUTH_PASSWORD_TIMEOUT', 10800),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Password History Limit
+    |--------------------------------------------------------------------------
+    |
+    | This value determines the number of previous passwords stored in the
+    | password history. Users will not be allowed to reuse any of their
+    | previous passwords up to this limit. By default, the system retains a
+    | history of the last 10 passwords.
+    |
+    */
+
+    'password_history_limit' => env('PASSWORD_HISTORY_LIMIT', 10),
+
 ];

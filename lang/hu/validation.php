@@ -125,6 +125,7 @@ return [
         'numbers' => 'A(z) :attribute értékének tartalmaznia kell legalább egy számot.',
         'symbols' => 'A(z) :attribute értékének tartalmaznia kell legalább egy speciális karaktert.',
         'uncompromised' => 'A megadott :attribute adatszivárgásban jelent meg. Kérjük, válasszon másik :attribute-t.',
+        'history' => 'A legutóbbi :limit jelszavát nem használhatja fel újra.',
     ],
     'present' => 'A(z) :attribute mező nem található.',
     'present_if' => 'A(z) :attribute mezőnek jelen kell lennie, amikor a(z) :other értéke :value.',
