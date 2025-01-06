@@ -1,5 +1,59 @@
 {
   "languageSelector": {
     "label": "Nyelv"
+  },
+  "login": {
+    "title": "Bejelentkezés",
+    "email": "Email cím",
+    "password": "Jelszó",
+    "submit": "Bejelentkezés"
+  },
+  "validation": {
+    "required": "A(z) {field} megadása kötelező.",
+    "name": {
+      "required": "A(z) {field} megadása kötelező.",
+      "min": "A(z) {field} nem lehet rövidebb {min} karakternél.",
+      "max": "A(z) {field} nem lehet hosszabb {max} karakternél.",
+      "upperLowerIncludingAccentedSpacesDotsHyphens": "A(z) {field} csak kis- és nagybetüket (beleértve az ékezetes karaktereket), pontot, szóközöket és kötőjeleket tartalmazhat."
+    },
+    "email": {
+      "required": "A(z) {field} megadása kötelező.",
+      "min": "A(z) {field} nem lehet rövidebb {min} karakternél.",
+      "max": "A(z) {field} nem lehet hosszabb {max} karakternél.",
+      "notValid": "A(z) {field} nem érvényes formátumú."
+    },
+    "password": {
+      "required": "A(z) {field} megadása kötelező.",
+      "min": "A(z) {field} nem lehet rövidebb {min} karakternél.",
+      "max": "A(z) {field} nem lehet hosszabb {max} karakternél.",
+      "mixed": "A(z) {field} tartalmaznia kell legalább egy kis- és egy nagybetűt.",
+      "numbers": "A(z) {field} tartalmaznia kell legalább egy számot.",
+      "symbols": "A(z) {field} tartalmaznia kell legalább egy speciális karaktert."
+    },
+    "password_confirmation": {
+      "required": "A(z) {field} megadása kötelező.",
+      "min": "A(z) {field} nem lehet rövidebb {min} karakternél.",
+      "max": "A(z) {field} nem lehet hosszabb {max} karakternél.",
+      "mixed": "A(z) {field} tartalmaznia kell legalább egy kis- és egy nagybetűt.",
+      "numbers": "A(z) {field} tartalmaznia kell legalább egy számot.",
+      "symbols": "A(z) {field} tartalmaznia kell legalább egy speciális karaktert.",
+      "notMatch": "A(z) {mainField} nem egyezik a megerősítéssel."
+    },
+    "length": {
+      "required": "A(z) {field} megadása kötelező.",
+      "min": "A(z) {field} nem lehet rövidebb {min} karakternél.",
+      "max": "A(z) {field} nem lehet hosszabb {max} karakternél."
+    },
+    "number": {
+      "required": "A(z) {field} megadása kötelező.",
+      "valid": "A(z) {field} nem érvényes formátumú.",
+      "min": "A(z) {field} nem lehet kisebb {min}.",
+      "max": "A(z) {field} nem lehet nagyobb {max}."
+    },
+    "mobilePhone": {
+      "required": "A(z) {field} megadása kötelező.",
+      "notValid": "A(z) {field} nem érvényes formátumú."
+    }
   }
+
 }

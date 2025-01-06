@@ -39,7 +39,7 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => $this->emailRules(),
+            'email' => $this->emailRules(false),
             'password' => $this->passwordRules(),
         ];
     }

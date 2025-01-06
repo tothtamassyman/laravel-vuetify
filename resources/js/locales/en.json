@@ -1,5 +1,58 @@
 {
   "languageSelector": {
     "label": "Language"
+  },
+  "login": {
+    "title": "Login",
+    "email": "Email",
+    "password": "Password",
+    "submit": "Login"
+  },
+  "validation": {
+    "required": "The {field} field is required.",
+    "name": {
+      "required": "The {field} field is required.",
+      "min": "The {field} field cannot be shorter than {min} characters.",
+      "max": "The {field} field cannot be longer than {max} characters.",
+      "upperLowerIncludingAccentedSpacesDotsHyphens": "The {field} field can only contain uppercase and lowercase letters (including accented characters), dot, spaces and hyphens."
+    },
+    "email": {
+      "required": "The {field} field is required.",
+      "min": "The {field} field cannot be shorter than {min} characters.",
+      "max": "The {field} field cannot be longer than {max} characters.",
+      "notValid": "The {field} field is not valid."
+    },
+    "password": {
+      "required": "The {field} field is required.",
+      "min": "The {field} field cannot be shorter than {min} characters.",
+      "max": "The {field} field cannot be longer than {max} characters.",
+      "mixed": "The {field} field must contain at least one lowercase and one uppercase letter.",
+      "numbers": "The {field} field must contain at least one number.",
+      "symbols": "The {field} field must contain at least one special character."
+    },
+    "password_confirmation": {
+      "required": "The {field} field is required.",
+      "min": "The {field} field cannot be shorter than {min} characters.",
+      "max": "The {field} field cannot be longer than {max} characters.",
+      "mixed": "The {field} field must contain at least one lowercase and one uppercase letter.",
+      "numbers": "The {field} field must contain at least one number.",
+      "symbols": "The {field} field must contain at least one special character.",
+      "notMatch": "The {mainField} field does not match confirmation."
+    },
+    "length": {
+      "required": "The {field} field is required.",
+      "min": "The {field} field cannot be shorter than {min} characters.",
+      "max": "The {field} field cannot be longer than {max} characters."
+    },
+    "number": {
+      "required": "The {field} field is required.",
+      "valid": "The {field} field is not valid.",
+      "min": "The {field} field cannot be less than {min}.",
+      "max": "The {field} field cannot be grater than {max}."
+    },
+    "mobilePhone": {
+      "required": "The {field} field is required.",
+      "notValid": "The {field} field is not valid."
+    }
   }
 }
