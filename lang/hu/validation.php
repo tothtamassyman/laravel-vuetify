@@ -192,10 +192,8 @@ return [
     */
 
     'attributes' => [
-        'users' => [
-            'email' => 'E-mail cím',
-            'password' => 'Jelszó',
-        ],
+        'email' => 'E-mail cím',
+        'password' => 'Jelszó',
     ],
 
 ];

@@ -2,13 +2,14 @@
 
 namespace App\Http\Requests\Auth;
 
+use App\Http\Requests\Traits\EmailValidationRules;
+use App\Http\Requests\Traits\PasswordValidationRules;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
-use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\ValidationException;
 
 /**
@@ -17,6 +18,9 @@ use Illuminate\Validation\ValidationException;
  */
 class LoginRequest extends FormRequest
 {
+    use EmailValidationRules;
+    use PasswordValidationRules;
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -35,15 +39,8 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required', 'string', 'email:rfc,dns,spoof,filter', 'min:6', 'max:255'],
-            'password' => [
-                'required',
-                Password::min(8)
-                    ->max(255)
-                    ->mixedCase()
-                    ->numbers()
-                    ->symbols()
-            ],
+            'email' => $this->emailRules(),
+            'password' => $this->passwordRules(),
         ];
     }
 
@@ -56,11 +53,11 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt($this->only('email', 'password'))) {
+        if (!Auth::attempt($this->only('email', 'password'))) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
-                'email' => 'The provided credentials do not match our records.',
+                'email' => __('auth.failed'),
             ]);
         }
 
@@ -75,7 +72,7 @@ class LoginRequest extends FormRequest
      */
     public function ensureIsNotRateLimited(): void
     {
-        if (! RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
+        if (!RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
             return;
         }
 
