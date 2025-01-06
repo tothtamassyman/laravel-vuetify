@@ -36,13 +36,14 @@ trait PasswordValidationRules
         // Define the base rules for password validation
         $rules = [
             $this->isMethod('post') ? 'required' : 'nullable', // Required for POST requests, optional otherwise
-            'string',               // Must be a string
-            Password::min(8)   // Minimum length of 8 characters
-            ->max(255)         // Maximum length of 255 characters
-            ->mixedCase()           // Must include both uppercase and lowercase letters
-            ->numbers()             // Must include at least one numeric character
-            ->symbols()             // Must include at least one special character
-            ->uncompromised(),      // Must not appear in common password data breaches
+            'string',                        // Must be a string
+            Password::min(8)            // Minimum length of 8 characters
+            ->max(255)                  // Maximum length of 255 characters
+            ->mixedCase()                    // Must include both uppercase and lowercase letters
+            ->numbers()                      // Must include at least one numeric character
+            ->symbols()                      // Must include at least one special character
+            ->uncompromised(),               // Must not appear in common password data breaches
+            ...$this->historyRules($userId), // Check against recent passwords
         ];
 
         // Add the confirmation rule if needed
@@ -50,11 +51,30 @@ trait PasswordValidationRules
             $rules[] = 'confirmed'; // Ensures the password matches `password_confirmation`
         }
 
-        // Add the NotInPasswordHistory rule if a user ID is provided
-        if ($userId) {
-            $rules[] = new NotInPasswordHistory($userId);
+        // Add current_password validation if the request is PUT or PATCH
+        if ($this->isMethod('put') || $this->isMethod('patch')) {
+            $rules[] = 'current_password';
         }
 
         return $rules;
+    }
+
+    /**
+     * Get the validation rules for checking password history.
+     *
+     * This method provides a validation rule to ensure that the new password
+     * has not been used recently by the user. The rule dynamically checks the
+     * user's password history if a valid user ID is provided.
+     *
+     * If the user ID is null, no password history validation is applied.
+     *
+     * @param  int|null  $userId  The ID of the user whose password history should be validated.
+     *                            If null, the history check is skipped.
+     * @return array              An array containing the password history validation rule.
+     *                            Returns an empty array if no user ID is provided.
+     */
+    protected function historyRules(?int $userId): array
+    {
+        return $userId ? [new NotInPasswordHistory($userId)] : [];
     }
 }
