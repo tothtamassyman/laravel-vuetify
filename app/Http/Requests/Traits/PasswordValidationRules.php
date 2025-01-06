@@ -41,7 +41,7 @@ trait PasswordValidationRules
             ->max(255)                  // Maximum length of 255 characters
             ->mixedCase()                    // Must include both uppercase and lowercase letters
             ->numbers()                      // Must include at least one numeric character
-            ->symbols()                      // Must include at least one special character
+//            ->symbols()                      // Must include at least one special character
             ->uncompromised(),               // Must not appear in common password data breaches
             ...$this->historyRules($userId), // Check against recent passwords
         ];

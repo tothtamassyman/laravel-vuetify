@@ -56,7 +56,7 @@ export function useValidationRules() {
                 v => !v || v.length <= max || t('validation.password.max', {max, field}),
                 v => !v || (/[a-z]/.test(v) && /[A-Z]/.test(v)) || t('validation.password.mixed', {field}),
                 v => !v || /[0-9]/.test(v) || t('validation.password.numbers', {field}),
-                v => !v || /[\W_]/.test(v) || t('validation.password.symbols', {field}),
+                // v => !v || /[\W_]/.test(v) || t('validation.password.symbols', {field}),
             ];
 
             if (required) {
@@ -72,7 +72,7 @@ export function useValidationRules() {
                 v => !v || v.length <= max || t('validation.password_confirmation.max', {max, field}),
                 v => !v || (/[a-z]/.test(v) && /[A-Z]/.test(v)) || t('validation.password_confirmation.mixed', {field}),
                 v => !v || /[0-9]/.test(v) || t('validation.password_confirmation.numbers', {field}),
-                v => !v || /[\W_]/.test(v) || t('validation.password_confirmation.symbols', {field}),
+                //v => !v || /[\W_]/.test(v) || t('validation.password_confirmation.symbols', {field}),
                 v => v === newPassword || t('validation.password_confirmation.notMatch', {field, mainField}),
             ];
 
