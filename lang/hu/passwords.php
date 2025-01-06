@@ -18,5 +18,6 @@ return [
     'throttled' => 'Kérjük, várjon, mielőtt újra próbálkozna.',
     'token' => 'Ez a jelszó-visszaállítási token érvénytelen.',
     'user' => "Nem találunk felhasználót ezzel az e-mail címmel.",
+    'updated' => 'A jelszó sikeresen frissítve.',
 
 ];
