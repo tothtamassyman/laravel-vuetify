@@ -7,7 +7,7 @@ import { POSITION } from 'vue-toastification';
 
 const toastOptions = {
     position: POSITION.TOP_RIGHT,
-    timeout: 5000,
+    timeout: 3000,
     closeOnClick: true,
     pauseOnFocusLoss: true,
     pauseOnHover: true,

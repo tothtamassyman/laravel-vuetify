@@ -1,3 +1,56 @@
+<script setup>
+import {reactive, ref} from 'vue';
+import {useI18n} from 'vue-i18n';
+import { useRouter } from 'vue-router';
+import {useAuthStore} from '@/stores/auth';
+import {useValidationRules} from '@/utils/validationRules';
+
+const router = useRouter();
+const authStore = useAuthStore();
+const {t} = useI18n();
+const {emailRules, passwordRules} = useValidationRules();
+
+const loginForm = ref(null);
+const email = ref('');
+const password = ref('');
+const showPassword = ref(false);
+const loading = ref(false);
+const backendErrors = reactive({});
+const backendErrorsTimeout = ref(3000);
+
+const onEnter = () => {
+    login();
+};
+
+const login = async () => {
+    const result = await loginForm.value.validate();
+
+    if (result.valid) {
+        loading.value = true;
+        try {
+            await authStore.login({
+                email: email.value,
+                password: password.value,
+            });
+
+            await router.push({name: 'Dashboard'});
+        } catch (error) {
+            console.error('Login error:', error);
+            Object.assign(backendErrors, error.backendErrors || {});
+            setTimeout(() => {
+                Object.keys(backendErrors).forEach((key) => (backendErrors[key] = ''));
+            }, backendErrorsTimeout.value);
+        } finally {
+            loading.value = false;
+        }
+    } else {
+        setTimeout(() => {
+            loginForm?.value?.resetValidation();
+        }, backendErrorsTimeout.value);
+    }
+};
+</script>
+
 <template>
     <v-container>
         <v-card class="mx-auto pa-12 pb-8" elevation="4" max-width="448" rounded="lg">
@@ -22,6 +75,7 @@
                             variant="outlined"
                             prepend-inner-icon="mdi-email-outline"
                             @keyup.enter="onEnter"
+                            required
                     ></v-text-field>
                     <div class="my-2"></div>
                     <v-text-field
@@ -39,13 +93,14 @@
                             prepend-inner-icon="mdi-lock-outline"
                             @click:append-inner="showPassword = !showPassword"
                             @keyup.enter="onEnter"
+                            required
                     ></v-text-field>
                     <v-btn
                             block
                             class="mt-2"
                             color="primary"
                             :loading="loading"
-                            type="submit"
+                            @click="login"
                     >
                         {{ t("login.submit") }}
                     </v-btn>
@@ -55,52 +110,6 @@
     </v-container>
 </template>
 
-<script setup>
-import {reactive, ref} from 'vue';
-import {useI18n} from 'vue-i18n';
-import {useAuthStore} from '@/stores/auth';
-import {useValidationRules} from '@/utils/validationRules';
+<style scoped>
 
-const {emailRules, passwordRules} = useValidationRules();
-const {t} = useI18n();
-const authStore = useAuthStore();
-
-const loginForm = ref(null);
-const email = ref('');
-const password = ref('');
-const showPassword = ref(false);
-const loading = ref(false);
-const backendErrors = reactive({});
-const backendErrorsTimeout = ref(3000);
-
-const onEnter = () => {
-    login();
-};
-
-const login = async () => {
-    const result = await loginForm.value.validate();
-
-    if (result.valid) {
-        loading.value = true;
-        try {
-            const response = await authStore.login({
-                email: email.value,
-                password: password.value,
-            });
-            console.log('Login successful');
-        } catch (error) {
-            console.error('Login error:', error);
-            Object.assign(backendErrors, error.backendErrors || {});
-            setTimeout(() => {
-                Object.keys(backendErrors).forEach((key) => (backendErrors[key] = ''));
-            }, backendErrorsTimeout.value);
-        } finally {
-            loading.value = false;
-        }
-    } else {
-        setTimeout(() => {
-            loginForm?.value?.resetValidation();
-        }, backendErrorsTimeout.value);
-    }
-};
-</script>
+</style>

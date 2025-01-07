@@ -51,7 +51,7 @@ trait PasswordValidationRules
         $rules = [];
 
         // Add 'required' or 'nullable' based on HTTP method
-        $rules[] = $this->isPostRequest() ? 'required' : 'nullable';
+        $rules[] = request()->method() === 'POST' ? 'required' : 'nullable';
 
         // Must be a valid string
         $rules[] = 'string';
@@ -91,7 +91,7 @@ trait PasswordValidationRules
         }
 
         // Add current_password validation dynamically
-        if ($this->isUpdateRequest()) {
+        if (in_array(request()->method(), ['PUT', 'PATCH'])) {
             $rules[] = 'current_password';
         }
 
@@ -113,25 +113,5 @@ trait PasswordValidationRules
     protected function historyRules(?int $userId): array
     {
         return $userId ? [new NotInPasswordHistory($userId)] : [];
-    }
-
-    /**
-     * Check if the current request is a POST request.
-     *
-     * @return bool
-     */
-    protected function isPostRequest(): bool
-    {
-        return request()->method() === 'POST';
-    }
-
-    /**
-     * Check if the current request is an update request (PUT or PATCH).
-     *
-     * @return bool
-     */
-    protected function isUpdateRequest(): bool
-    {
-        return in_array(request()->method(), ['PUT', 'PATCH']);
     }
 }

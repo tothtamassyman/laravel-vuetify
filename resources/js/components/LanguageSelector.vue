@@ -24,14 +24,17 @@ onMounted(async () => {
 </script>
 
 <template>
-  <v-select
-      :items="languageOptions"
-      v-model="currentLocale"
-      :label="t('languageSelector.label')"
-      dense
-      outlined
-      item-title="label"
-      item-value="value"
-      @update:modelValue="changeLanguage"
-  ></v-select>
+    <v-container class="w-25">
+        <v-select
+            v-model="currentLocale"
+            :items="languageOptions"
+            item-title="label"
+            item-value="value"
+            :label="t('languageSelector.label')"
+            class="mt-6"
+            density="compact"
+            variant="outlined"
+            @update:modelValue="changeLanguage"
+        ></v-select>
+    </v-container>
 </template>

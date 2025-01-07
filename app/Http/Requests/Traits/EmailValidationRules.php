@@ -47,7 +47,7 @@ trait EmailValidationRules
         $rules = [];
 
         // Add 'required' or 'nullable' based on HTTP method
-        $rules[] = $this->isPostRequest() ? 'required' : 'nullable';
+        $rules[] = request()->method() === 'POST' ? 'required' : 'nullable';
 
         // Must be a valid string
         $rules[] = 'string';
@@ -64,7 +64,7 @@ trait EmailValidationRules
         $rules[] = "email:{$standards}";
 
         // Automatically determine the ignore ID for update requests, if not explicitly provided
-        if (is_null($ignoreId) && $this->isUpdateRequest()) {
+        if (is_null($ignoreId) && in_array(request()->method(), ['PUT', 'PATCH'])) {
             $ignoreId = $this->route('user')->id ?? $this->user()->id;
         }
 
@@ -82,25 +82,5 @@ trait EmailValidationRules
         }
 
         return $rules;
-    }
-
-    /**
-     * Check if the current request is a POST request.
-     *
-     * @return bool
-     */
-    protected function isPostRequest(): bool
-    {
-        return request()->method() === 'POST';
-    }
-
-    /**
-     * Check if the current request is an update request (PUT or PATCH).
-     *
-     * @return bool
-     */
-    protected function isUpdateRequest(): bool
-    {
-        return in_array(request()->method(), ['PUT', 'PATCH']);
     }
 }

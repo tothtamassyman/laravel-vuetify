@@ -2,7 +2,8 @@ import { useAuthStore } from '@/stores/auth';
 
 export async function globalBeforeEachGuard(to, from, next) {
     const authStore = useAuthStore();
-    const isAuthenticated = await authStore.isAuthenticated();
+
+    const isAuthenticated = !!authStore.token;
     const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
 
     if (requiresAuth && !isAuthenticated) {
