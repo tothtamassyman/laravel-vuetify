@@ -45,6 +45,7 @@ class EnhancedValidationException extends ValidationException
     public function render(Request $request): JsonResponse
     {
         return response()->json([
+            'success' => false,
             'message' => self::summarize($this->validator),
             'errors' => $this->validator->errors(),
         ], 422);
