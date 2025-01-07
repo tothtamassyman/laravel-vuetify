@@ -1,5 +1,8 @@
 import axios from 'axios';
 import router from '@/router';
+import { useToast } from 'vue-toastification';
+
+const toast = useToast();
 
 const getToken = () => {
     const token = localStorage.getItem('token');
@@ -70,6 +73,9 @@ const handleResponse = (response) => {
     if (!response.data || typeof response.data !== 'object') {
         console.warn('Unexpected response format:', response);
     }
+
+    toast.success(`${response.data.message || 'Successful'}`);
+
     return response;
 };
 
@@ -156,6 +162,8 @@ const handleResponseError = async (error) => {
     }
 
     logErrorInDevelopment(error, 'Response');
+
+    toast.error(`Error: ${error.message || 'Unknown error'}`);
 
     return Promise.reject(error);
 };
