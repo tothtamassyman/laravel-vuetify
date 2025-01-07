@@ -3,9 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Traits\EmailValidationRules;
+use App\Http\Requests\Auth\ForgotPasswordRequest;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\ValidationException;
 
@@ -18,45 +17,43 @@ use Illuminate\Validation\ValidationException;
  */
 class PasswordResetLinkController extends Controller
 {
-    // Use the EmailValidationRules trait to include the emailRules() method
-    use EmailValidationRules;
-
     /**
      * Handle an incoming password reset link request.
      *
-     * Validates the provided email address and attempts to send a password
-     * reset link. If successful, the user is redirected back with a success
-     * message. If unsuccessful, a validation exception is thrown.
+     * Validates the email address using the ForgotPasswordRequest and attempts
+     * to send a password reset link. If the link is sent successfully, a JSON
+     * response with a success message is returned. If the process fails,
+     * a ValidationException is thrown.
      *
-     * @param  Request  $request
-     * @return JsonResponse
+     * The ValidationException ensures:
+     * 1. The user receives clear feedback about why the request failed (e.g., invalid email).
+     * 2. Sensitive information (e.g., whether the email exists) is protected, enhancing security.
+     * 3. The frontend can handle the error consistently, adhering to Laravel's standard
+     *    validation error format.
      *
-     * @throws ValidationException
+     * @param  ForgotPasswordRequest  $request  The validated password reset link request.
+     * @return JsonResponse                     A JSON response indicating success or failure.
+     *
+     * @throws ValidationException              Thrown if the password reset process fails.
      */
-    public function store(Request $request): JsonResponse
+    public function store(ForgotPasswordRequest $request): JsonResponse
     {
-        // Validate the email address using the emailRules() method from the trait
-        $request->validate([
-            'email' => $this->emailRules(false), // No uniqueness check needed for password reset
-        ]);
-
-        // We will send the password reset link to this user. Once we have attempted
-        // to send the link, we will examine the response then see the message we
-        // need to show to the user. Finally, we'll send out a proper response.
+        // Send the password reset link to the specified email address
         $status = Password::sendResetLink(
             $request->only('email')
         );
 
-        // Redirect back with a success message if the link was sent successfully
+        // If the reset link was sent successfully, return a success message
         if ($status == Password::RESET_LINK_SENT) {
             return response()->json([
-                'message' => __($status)
+                'success' => true,
+                'message' => __($status),
             ]);
         }
 
-        // Throw a validation exception with the appropriate error message if the link could not be sent
+        // Throwing a ValidationException ensures secure and structured error handling
         throw ValidationException::withMessages([
-            'email' => [trans($status)],
+            'email' => [__($status)],
         ]);
     }
 }

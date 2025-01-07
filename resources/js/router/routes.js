@@ -18,6 +18,16 @@ export default [
         },
     },
     {
+        path: '/reset-password/:token',
+        name: 'ResetPassword',
+        component: () => import('@/views/auth/ResetPassword.vue'),
+        props: (route) => ({ token: route.params.token, email: route.query.email }),
+        meta: {
+            requiresAuth: false,
+            title: 'Reset Password',
+        },
+    },
+    {
         path: '/dashboard',
         name: 'Dashboard',
         component: () => import('@/views/Dashboard.vue'),

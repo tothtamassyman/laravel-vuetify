@@ -3,12 +3,10 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Traits\EmailValidationRules;
-use App\Http\Requests\Traits\PasswordValidationRules;
+use App\Http\Requests\Auth\NewPasswordRequest;
 use App\Models\User;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
@@ -23,34 +21,21 @@ use Illuminate\Validation\ValidationException;
  */
 class NewPasswordController extends Controller
 {
-    // Use the EmailValidationRules trait to include the emailRules() method
-    use EmailValidationRules;
-
-    // Use the PasswordValidationRules trait to include the passwordRules() method
-    use PasswordValidationRules;
-
     /**
      * Handle an incoming new password request.
      *
-     * Validates the request, resets the user's password, and redirects the user
-     * to the login page if successful. Throws a validation exception if the process fails.
+     * This method validates the request, attempts to reset the user's password,
+     * updates the password history, and triggers the necessary events. If the
+     * reset is successful, a JSON response with a success message is returned.
+     * If the reset fails, a validation exception is thrown with the appropriate error message.
      *
-     * @param  Request  $request
-     * @return JsonResponse
+     * @param  NewPasswordRequest  $request  The incoming password reset request.
+     * @return JsonResponse                  A JSON response indicating success or failure.
      *
-     * @throws ValidationException
+     * @throws ValidationException           Thrown if the password reset process fails.
      */
-    public function store(Request $request): JsonResponse
+    public function store(NewPasswordRequest $request): JsonResponse
     {
-        // Validate the request using the Email and Password validation rules
-        $request->validate([
-            'token' => 'required',
-            // No uniqueness check for password reset
-            'email' => $this->emailRules(false),
-            // Requires confirmation and history check
-            'password' => $this->passwordRules(true, $this->getUserIdByEmail($request->email)),
-        ]);
-
         // Here we will attempt to reset the user's password. If it is successful we
         // will update the password on an actual user model and persist it to the
         // database. Otherwise we will parse the error and return the response.
@@ -63,12 +48,17 @@ class NewPasswordController extends Controller
                     'remember_token' => Str::random(60),
                 ])->save();
 
-                // Add password to password history
+                // Add the new password to the user's password history
                 $user->passwordHistories()->create([
                     'password' => $request->password,
                 ]);
 
-                // Trigger the PasswordReset event
+                /**
+                 * Triggers the PasswordReset event after a successful password reset.
+                 * This event can be used to perform additional actions, such as logging
+                 * the reset attempt, notifying administrators, or sending a confirmation
+                 * email to the user.
+                 */
                 event(new PasswordReset($user));
             }
         );
@@ -78,13 +68,14 @@ class NewPasswordController extends Controller
         // exception with an appropriate error message.
         if ($status == Password::PASSWORD_RESET) {
             return response()->json([
-                'message' => __($status)
+                'success' => true,
+                'message' => __($status),
             ]);
         }
 
-        // Throw a validation exception with the appropriate error message
+        // Throwing a ValidationException ensures secure and structured error handling
         throw ValidationException::withMessages([
-            'email' => [trans($status)],
+            'email' => [__($status)],
         ]);
     }
 
