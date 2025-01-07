@@ -8,22 +8,34 @@ use Illuminate\Validation\Rules\Password;
 /**
  * Trait PasswordValidationRules
  *
- * Provides reusable validation rules for password fields, including checks
- * against password history to prevent reuse of recent passwords.
- * This trait can be used in FormRequest classes or controllers to standardize
- * password validation logic across different scenarios (e.g., login, registration,
- * profile update, or administrative user management).
+ * This trait provides reusable validation rules for password fields. It dynamically
+ * generates rules based on the application's configuration (`validationPolicies.password`)
+ * and contextual parameters such as HTTP methods and user-specific password history.
  *
- * @package App\Traits
+ * Key Features:
+ * - Enforces configurable password policies, including length, complexity, and uncompromised checks.
+ * - Dynamically adapts to HTTP request methods (e.g., `required` for creation, `nullable` for updates).
+ * - Integrates password history validation to prevent users from reusing recent passwords.
+ * - Supports optional password confirmation for sensitive operations (e.g., updates).
+ *
+ * Scenarios:
+ * - Registration: Enforces strong password requirements for new users.
+ * - Password Updates: Validates password history and requires confirmation.
+ * - Login: Password validation is skipped as it is verified against the database.
+ *
+ * Example Usage:
+ * Use this trait in `FormRequest` classes or controllers to standardize password validation logic
+ * and ensure consistent security policies across the application.
+ *
+ * @package App\Http\Requests\Traits
  */
 trait PasswordValidationRules
 {
     /**
      * Get the validation rules used to validate passwords.
      *
-     * This method returns an array of validation rules that are dynamically
-     * adjusted based on the HTTP request method and the need for password confirmation.
-     * It also includes a rule to check if the password has been used recently.
+     * The method dynamically generates validation rules based on the settings
+     * in the `config/validationPolicies.php` file.
      *
      * @param  bool  $needsConfirmation  Indicates whether the password must be confirmed
      *                                   (e.g., `password_confirmation` field is required).
@@ -33,26 +45,53 @@ trait PasswordValidationRules
      */
     protected function passwordRules(bool $needsConfirmation = false, int $userId = null): array
     {
-        // Define the base rules for password validation
-        $rules = [
-            request()->method() === 'POST' ? 'required' : 'nullable', // Required for POST requests, optional otherwise
-            'string',                        // Must be a string
-            Password::min(8)            // Minimum length of 8 characters
-            ->max(255)                  // Maximum length of 255 characters
-            ->mixedCase()                    // Must include both uppercase and lowercase letters
-            ->numbers()                      // Must include at least one numeric character
-//            ->symbols()                      // Must include at least one special character
-            ->uncompromised(),               // Must not appear in common password data breaches
-            ...$this->historyRules($userId), // Check against recent passwords
-        ];
+        // Get the password validation policies from the configuration file
+        $config = config('validationPolicies.password', []);
 
-        // Add the confirmation rule if needed
-        if ($needsConfirmation) {
-            $rules[] = 'confirmed'; // Ensures the password matches `password_confirmation`
+        $rules = [];
+
+        // Add 'required' or 'nullable' based on HTTP method
+        $rules[] = $this->isPostRequest() ? 'required' : 'nullable';
+
+        // Must be a valid string
+        $rules[] = 'string';
+
+        // Initialize Password rule
+        $passwordRule = Password::min($config['min_length'])
+            ->max($config['max_length']);
+
+        // Conditional rules
+        if ($config['mixed_case']) {
+            $passwordRule->mixedCase();
+        }
+        if ($config['numbers']) {
+            $passwordRule->numbers();
+        }
+        if ($config['symbols']) {
+            $passwordRule->symbols();
+        }
+        if ($config['letters']) {
+            $passwordRule->letters();
+        }
+        if ($config['uncompromised']) {
+            $passwordRule->uncompromised();
         }
 
-        // Add current_password validation if the request is PUT or PATCH
-        if (request()->isMethod('put') || request()->isMethod('patch')) {
+        // Add the base password rule
+        $rules[] = $passwordRule;
+
+        // Add history check if enabled
+        if ($config['history_check']) {
+            $rules = array_merge($rules, $this->historyRules($userId));
+        }
+
+        // Add confirmation rule if explicitly needed
+        if ($needsConfirmation) {
+            $rules[] = 'confirmed';
+        }
+
+        // Add current_password validation dynamically
+        if ($this->isUpdateRequest()) {
             $rules[] = 'current_password';
         }
 
@@ -64,8 +103,7 @@ trait PasswordValidationRules
      * This ensures that users cannot reuse recently used passwords,
      * enhancing security by mitigating predictable password cycling.
      *
-     * For example, a system may enforce a policy where the last 10 passwords
-     * cannot be reused.
+     * Ensures users cannot reuse recently used passwords.
      *
      * @param  int|null  $userId  The ID of the user whose password history should be validated.
      *                            If null, the history check is skipped.
@@ -75,5 +113,25 @@ trait PasswordValidationRules
     protected function historyRules(?int $userId): array
     {
         return $userId ? [new NotInPasswordHistory($userId)] : [];
+    }
+
+    /**
+     * Check if the current request is a POST request.
+     *
+     * @return bool
+     */
+    protected function isPostRequest(): bool
+    {
+        return request()->method() === 'POST';
+    }
+
+    /**
+     * Check if the current request is an update request (PUT or PATCH).
+     *
+     * @return bool
+     */
+    protected function isUpdateRequest(): bool
+    {
+        return in_array(request()->method(), ['PUT', 'PATCH']);
     }
 }
