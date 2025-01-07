@@ -10,7 +10,7 @@ use Illuminate\Validation\Rules\Password;
  *
  * Provides reusable validation rules for password fields, including checks
  * against password history to prevent reuse of recent passwords.
- * This trait can be used in FormRequest classes to standardize
+ * This trait can be used in FormRequest classes or controllers to standardize
  * password validation logic across different scenarios (e.g., login, registration,
  * profile update, or administrative user management).
  *
@@ -22,7 +22,7 @@ trait PasswordValidationRules
      * Get the validation rules used to validate passwords.
      *
      * This method returns an array of validation rules that are dynamically
-     * adjusted based on the HTTP method and the need for password confirmation.
+     * adjusted based on the HTTP request method and the need for password confirmation.
      * It also includes a rule to check if the password has been used recently.
      *
      * @param  bool  $needsConfirmation  Indicates whether the password must be confirmed
@@ -35,7 +35,7 @@ trait PasswordValidationRules
     {
         // Define the base rules for password validation
         $rules = [
-            $this->isMethod('post') ? 'required' : 'nullable', // Required for POST requests, optional otherwise
+            request()->method() === 'POST' ? 'required' : 'nullable', // Required for POST requests, optional otherwise
             'string',                        // Must be a string
             Password::min(8)            // Minimum length of 8 characters
             ->max(255)                  // Maximum length of 255 characters
@@ -52,7 +52,7 @@ trait PasswordValidationRules
         }
 
         // Add current_password validation if the request is PUT or PATCH
-        if ($this->isMethod('put') || $this->isMethod('patch')) {
+        if (request()->isMethod('put') || request()->isMethod('patch')) {
             $rules[] = 'current_password';
         }
 
@@ -60,13 +60,12 @@ trait PasswordValidationRules
     }
 
     /**
-     * Get the validation rules for checking password history.
+     * Adds validation rules to check the user's password history.
+     * This ensures that users cannot reuse recently used passwords,
+     * enhancing security by mitigating predictable password cycling.
      *
-     * This method provides a validation rule to ensure that the new password
-     * has not been used recently by the user. The rule dynamically checks the
-     * user's password history if a valid user ID is provided.
-     *
-     * If the user ID is null, no password history validation is applied.
+     * For example, a system may enforce a policy where the last 10 passwords
+     * cannot be reused.
      *
      * @param  int|null  $userId  The ID of the user whose password history should be validated.
      *                            If null, the history check is skipped.
