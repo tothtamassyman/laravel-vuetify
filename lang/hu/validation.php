@@ -179,6 +179,9 @@ return [
         'attribute-name' => [
             'rule-name' => 'custom-message',
         ],
+        'details.*.key' => [
+            'unique' => 'A(z) :attribute kulcs már létezik ennél a felhasználónál.',
+        ],
     ],
 
     /*

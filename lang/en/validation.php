@@ -179,6 +179,9 @@ return [
         'attribute-name' => [
             'rule-name' => 'custom-message',
         ],
+        'details.*.key' => [
+            'unique' => 'The :attribute key already exists for this user.',
+        ],
     ],
 
     /*

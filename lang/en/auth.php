@@ -16,5 +16,6 @@ return [
     'failed' => 'These credentials do not match our records.',
     'password' => 'The provided password is incorrect.',
     'throttle' => 'Too many login attempts. Please try again in :seconds seconds (:minutes minutes).',
+    'user_detail_key_exists' => 'The :attribute key already exists for this user.',
 
 ];
