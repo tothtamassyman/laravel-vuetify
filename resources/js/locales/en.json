@@ -4,7 +4,8 @@
   },
   "app": {
     "title": "Aplication",
-    "home": "Welcome Page",
+    "welcome": "Welcome Page",
+    "dashboard": "Dashboard",
     "login": "LogiN",
     "logout": "Logout"
   },

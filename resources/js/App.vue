@@ -1,43 +1,44 @@
 <script setup>
 /** @name App */
 
-import { useRouter } from 'vue-router';
-import { useAuthStore } from '@/stores/auth';
-import {useI18n} from "vue-i18n";
-import LanguageSelector from '@/components/LanguageSelector.vue';
+import {computed} from "vue";
+import {useRoute} from 'vue-router';
+import {useAuthStore} from '@/stores/auth';
+import {useI18n} from 'vue-i18n';
 
-const router = useRouter();
+import AppBar from "@/components/AppBar.vue";
+import Footer from '@/components/Footer.vue';
+import LanguageSelector from "@/components/LanguageSelector.vue";
+
+const route = useRoute();
 const authStore = useAuthStore();
-const {t} = useI18n();
-
-const logout = async () => {
-    try {
-        await authStore.logout();
-
-        await router.push({name: 'Welcome'});
-    } catch (error) {
-        console.error('Logout error:', error);
-    }
-};
+const {locale, t} = useI18n();
+const isAuthenticated = computed(() => !!authStore.token);
+const isLandingPage = computed(() => route.name === 'Welcome');
 </script>
 
 <template>
     <v-app>
-        <v-app-bar app>
-            <v-app-bar-title>{{ t('app.title') }}</v-app-bar-title>
-            <v-spacer></v-spacer>
-            <LanguageSelector />
-            <v-spacer></v-spacer>
-            <v-btn to="/">{{ t('welcome.title') }}</v-btn>
-            <v-btn v-if="authStore.token" to="/dashboard">{{ t('dashboard.title') }}</v-btn>
-            <v-btn v-if="authStore.token" @click="logout">{{ t('app.logout') }}</v-btn>
-            <v-btn v-else to="/login">{{ t('app.login') }}</v-btn>
-        </v-app-bar>
+        <!-- AppBar -->
+        <AppBar v-if="isAuthenticated"></AppBar>
+
+        <!-- Main -->
         <v-main>
-            <v-container>
+            <v-container fluid>
+                <v-row justify="center">
+                    <v-col cols="12" class="text-center">
+                        <v-btn v-if="!isLandingPage && !isAuthenticated" color="primary">
+                            <router-link to="/">{{ t('app.welcome') }}</router-link>
+                        </v-btn>
+                    </v-col>
+                </v-row>
+                <LanguageSelector v-if="!isLandingPage && !isAuthenticated"/>
                 <router-view/>
             </v-container>
         </v-main>
+
+        <!-- Footer -->
+        <Footer/>
     </v-app>
 </template>
 
