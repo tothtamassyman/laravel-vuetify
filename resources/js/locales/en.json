@@ -2,6 +2,20 @@
   "languageSelector": {
     "label": "Language"
   },
+  "app": {
+    "title": "Aplication",
+    "home": "Welcome Page",
+    "login": "LogiN",
+    "logout": "Logout"
+  },
+  "welcome": {
+    "title": "Welcome page",
+    "welcome_message": "Welcome to the app!"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome_message": "Welcome to the dashboard!"
+  },
   "login": {
     "title": "Login",
     "email": "Email",

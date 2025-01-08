@@ -2,6 +2,20 @@
   "languageSelector": {
     "label": "Nyelv"
   },
+  "app": {
+    "title": "Alkalmazás",
+    "home": "Üdvözlő oldal",
+    "login": "Bejelentkezés",
+    "logout": "Kijelentkezés"
+  },
+  "welcome": {
+    "title": "Üdvözlő oldal",
+    "welcome_message": "Üdvözöljük az alkalmazásban!"
+  },
+  "dashboard": {
+    "title": "Irányítópult",
+    "welcome_message": "\nÜdvözöljük az irányítópulton!"
+  },
   "login": {
     "title": "Bejelentkezés",
     "email": "Email cím",
