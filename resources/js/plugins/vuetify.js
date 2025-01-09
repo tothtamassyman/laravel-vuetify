@@ -6,8 +6,6 @@ import * as components from 'vuetify/components';
 import * as directives from 'vuetify/directives';
 import {aliases, mdi} from 'vuetify/iconsets/mdi';
 
-const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)');
-
 const vuetify = createVuetify({
     components,
     directives,
@@ -19,7 +17,6 @@ const vuetify = createVuetify({
         },
     },
     theme: {
-        defaultTheme: prefersDarkMode.matches ? 'dark' : 'light',
         themes: {
             light: {
                 dark: false,
