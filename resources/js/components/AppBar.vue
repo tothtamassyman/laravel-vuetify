@@ -44,13 +44,10 @@ const logout = async () => {
                 {{ themeStore.currentTheme === 'dark' ? 'mdi-white-balance-sunny' : 'mdi-moon-waning-crescent' }}
             </v-icon>
         </v-btn>
-        <v-btn @click="router.push({ name: 'Welcome' })" :color="themeStore.primaryColor">
-            {{ t('app.welcome') }}
-        </v-btn>
-        <v-btn v-if="!isAuthenticated" @click="router.push({ name: 'Login' })" :color="themeStore.primaryColor">
+        <v-btn v-if="!isAuthenticated" @click="router.push({ name: 'Login' })" :color="themeStore.primaryColor" prepend-icon="mdi-login">
             {{ t('app.login') }}
         </v-btn>
-        <v-btn v-else @click="logout" :color="themeStore.primaryColor">
+        <v-btn v-else @click="logout" :color="themeStore.primaryColor" prepend-icon="mdi-logout">
             {{ t('app.logout') }}
         </v-btn>
     </v-app-bar>
