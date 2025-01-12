@@ -1,7 +1,7 @@
 <script setup>
 import {ref, onMounted} from 'vue';
 import {useI18n} from 'vue-i18n';
-import {useLanguageStore} from '@/stores/language';
+import {useLanguageStore} from '@/stores/languageStore.js';
 
 const {locale, t} = useI18n();
 const languageStore = useLanguageStore();

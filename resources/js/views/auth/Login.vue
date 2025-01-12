@@ -2,7 +2,7 @@
 import {reactive, ref} from 'vue';
 import {useI18n} from 'vue-i18n';
 import { useRouter } from 'vue-router';
-import {useAuthStore} from '@/stores/auth';
+import {useAuthStore} from '@/stores/authStore.js';
 import {useValidationRules} from '@/utils/validationRules';
 
 const router = useRouter();

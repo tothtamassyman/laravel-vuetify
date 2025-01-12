@@ -1,5 +1,5 @@
 import {createI18n} from 'vue-i18n';
-import {useLanguageStore} from '@/stores/language';
+import {useLanguageStore} from '@/stores/languageStore.js';
 
 const fetchAvailableLocales = async () => {
     const languageStore = useLanguageStore();

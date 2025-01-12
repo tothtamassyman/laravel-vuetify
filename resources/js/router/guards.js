@@ -1,4 +1,4 @@
-import { useAuthStore } from '@/stores/auth';
+import { useAuthStore } from '@/stores/authStore.js';
 
 export async function globalBeforeEachGuard(to, from, next) {
     const authStore = useAuthStore();

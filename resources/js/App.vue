@@ -3,7 +3,7 @@
 
 import {computed} from "vue";
 import {useRoute} from 'vue-router';
-import {useAuthStore} from '@/stores/auth';
+import {useAuthStore} from '@/stores/authStore.js';
 import {useI18n} from 'vue-i18n';
 
 import AppBar from "@/components/AppBar.vue";

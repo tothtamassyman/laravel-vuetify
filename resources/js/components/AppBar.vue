@@ -1,7 +1,7 @@
 <script setup>
 /** @name AppBar */
 import {useRoute, useRouter} from 'vue-router';
-import {useAuthStore} from '@/stores/auth';
+import {useAuthStore} from '@/stores/authStore.js';
 import {useThemeStore} from '@/stores/themeStore';
 import {useI18n} from 'vue-i18n';
 
