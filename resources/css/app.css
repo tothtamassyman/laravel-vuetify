@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.v-select .v-input__control {
+    color: rgba(var(--v-theme-primary), 0.8) !important;
+}
