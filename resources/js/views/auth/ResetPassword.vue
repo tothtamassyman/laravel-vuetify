@@ -1,9 +1,13 @@
 <script setup>
+/** @name ResetPassword */
+
 import {ref} from 'vue';
 import axios from '@/plugins/axios';
 import {useRoute} from 'vue-router';
+import {useI18n} from "vue-i18n";
 
 const route = useRoute();
+const {t} = useI18n();
 const email = ref(route.query.email || '');
 const password = ref('');
 const passwordConfirmation = ref('');
@@ -35,23 +39,23 @@ const submit = async () => {
         <v-form ref="form">
             <v-text-field
                     v-model="email"
-                    label="Email"
+                    :label="t('default.reset-password.email')"
                     :error-messages="errors.email"
             ></v-text-field>
             <v-text-field
                     v-model="password"
-                    label="New Password"
+                    :label="t('default.reset-password.new_password')"
                     type="password"
                     :error-messages="errors.password"
             ></v-text-field>
             <v-text-field
                     v-model="passwordConfirmation"
-                    label="Confirm Password"
+                    :label="t('default.reset-password.password_confirmation')"
                     type="password"
                     :error-messages="errors.password_confirmation"
             ></v-text-field>
-            <v-btn @click="submit">Reset Password</v-btn>
-            <v-alert v-if="alertMessage" type="success" dismissible>{{ alertMessage }}</v-alert>
+            <v-btn @click="submit">{{ t('default.reset-password.submit_button')}}</v-btn>
+            <v-alert v-if="alertMessage" type="error" dismissible>{{ alertMessage }}</v-alert>
         </v-form>
     </v-container>
 </template>

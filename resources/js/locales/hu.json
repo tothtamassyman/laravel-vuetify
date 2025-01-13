@@ -9,6 +9,16 @@
     "login": "Bejelentkezés",
     "logout": "Kijelentkezés"
   },
+  "not-found": {
+    "title": "404 - Az oldal nem található",
+    "message": "A keresett oldal nem létezik.",
+    "redirect_button": "Vissza a főoldalra"
+  },
+  "forbidden": {
+    "title": "403 - Tiltott",
+    "message": "Nincs jogosultságod az oldal megtekintéséhez.",
+    "redirect_button": "Vissza a főoldalra"
+  },
   "errors": {
     "guard": {
       "i18n_not_initialized": "Az i18n modul nincs inicializálva.",
@@ -32,15 +42,100 @@
     "title": "Üdvözlő oldal",
     "welcome_message": "Üdvözöljük az alkalmazásban!"
   },
-  "dashboard": {
-    "title": "Irányítópult",
-    "welcome_message": "\nÜdvözöljük az irányítópulton!"
-  },
   "login": {
     "title": "Bejelentkezés",
-    "email": "Email cím",
+    "email": "E-mail cím",
     "password": "Jelszó",
     "submit": "Bejelentkezés"
+  },
+  "reset-password": {
+    "title": "Login",
+    "email": "E-mail cím",
+    "new_password": "Jelszó",
+    "password_confirmation": "Jelszó megerősítése",
+    "submit_button": "Jelszó visszaállítása"
+  },
+  "dashboard": {
+    "title": "Irányítópult",
+    "welcome_message": "Üdvözöljük az Irányítópulton!"
+  },
+  "settings": {
+    "user-profile": {
+      "title": "Felhasználói profil",
+      "welcome_message": "Üdvözöljük a Felhasználói profil oldalon!"
+    },
+    "access-management": {
+      "groups": {
+        "title": "Csoportok",
+        "welcome_message": "Üdvözöljük a Csoportok oldalon!"
+      },
+      "users": {
+        "title": "Felhasználók",
+        "welcome_message": "Üdvözöljük a Felhasználók oldalon!"
+      },
+      "roles": {
+        "title": "Szerepkörök",
+        "welcome_message": "Üdvözöljük a Szerepkörök oldalon!"
+      },
+      "permissions": {
+        "title": "Jogosultságok",
+        "welcome_message": "Üdvözöljük a Jogosultságok oldalon!"
+      }
+    }
+  },
+  "routes": {
+    "welcome": {
+      "title": "Kezdőlap",
+      "subtitle": "Ugrás a kezdőlapra"
+    },
+    "login": {
+      "title": "Bejelentkezés",
+      "subtitle": "Bejelentkezés az oldalra"
+    },
+    "reset-password": {
+      "title": "Jelszó visszaállítás",
+      "subtitle": "Jelszó visszaállítás"
+    },
+    "dashboard": {
+      "title": "Irányítópult",
+      "subtitle": "Ugrás az irányítópontra"
+    },
+    "settings": {
+      "title": "Beállítások",
+      "subtitle": "Rendszerbeállítások",
+      "user-profile": {
+        "title": "Felhasználói profil",
+        "subtitle": "Felhasználói profil beállítások"
+      },
+      "access-management": {
+        "title": "Hozzáférés kezelés",
+        "subtitle": "Hozzáférés kezelési beállítások",
+        "groups": {
+          "title": "Csoportok",
+          "subtitle": "Csoportok kezelése"
+        },
+        "users": {
+          "title": "Felhasználók",
+          "subtitle": "Felhasználók kezelése"
+        },
+        "roles": {
+          "title": "Szerepkörök",
+          "subtitle": "Szerepkörök kezelése"
+        },
+        "permissions": {
+          "title": "Jogosultságok",
+          "subtitle": "Jogosultságok kezelése"
+        }
+      }
+    },
+    "not-found": {
+      "title": "Nem található",
+      "subtitle": "Az oldal nem található"
+    },
+    "forbidden": {
+      "title": "Tiltott",
+      "subtitle": "Hozzáférés megtagadva"
+    }
   },
   "validation": {
     "required": "A(z) {field} megadása kötelező.",
@@ -89,5 +184,4 @@
       "notValid": "A(z) {field} nem érvényes formátumú."
     }
   }
-
 }

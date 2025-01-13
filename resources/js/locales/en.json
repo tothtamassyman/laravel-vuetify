@@ -6,8 +6,18 @@
     "title": "Aplication",
     "welcome": "Welcome Page",
     "dashboard": "Dashboard",
-    "login": "LogiN",
+    "login": "Login",
     "logout": "Logout"
+  },
+  "not-found": {
+    "title": "404 - Page Not Found",
+    "message": "The page you are looking for does not exist.",
+    "redirect_button": "Go to Home"
+  },
+  "forbidden": {
+    "title": "403 - Forbidden",
+    "message": "You don't have permission to access this page.",
+    "redirect_button": "Go to Home"
   },
   "errors": {
     "guard": {
@@ -32,15 +42,100 @@
     "title": "Welcome page",
     "welcome_message": "Welcome to the app!"
   },
-  "dashboard": {
-    "title": "Dashboard",
-    "welcome_message": "Welcome to the dashboard!"
-  },
   "login": {
     "title": "Login",
     "email": "Email",
     "password": "Password",
     "submit": "Login"
+  },
+  "reset-password": {
+    "title": "Login",
+    "email": "Email",
+    "new_password": "Password",
+    "password_confirmation": "Password confirmation",
+    "submit_button": "Reset password"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome_message": "Welcome to the dashboard!"
+  },
+  "settings": {
+    "user-profile": {
+      "title": "User profile",
+      "welcome_message": "Welcome to the User profile page!"
+    },
+    "access-management": {
+      "groups": {
+        "title": "Groups",
+        "welcome_message": "Welcome to the Groups page!"
+      },
+      "users": {
+        "title": "Users",
+        "welcome_message": "Welcome to the Users page!"
+      },
+      "roles": {
+        "title": "Roles",
+        "welcome_message": "Welcome to the Roles page!"
+      },
+      "permissions": {
+        "title": "Permissions",
+        "welcome_message": "Welcome to the Permissions page!"
+      }
+    }
+  },
+  "routes": {
+    "welcome": {
+      "title": "Welcome page",
+      "subtitle": "Jump to the Welcome page"
+    },
+    "login": {
+      "title": "Login",
+      "subtitle": "Login to the site"
+    },
+    "reset-password": {
+      "title": "Reset password",
+      "subtitle": "Reset password"
+    },
+    "dashboard": {
+      "title": "Dashboard",
+      "subtitle": "Jump to Dashboard"
+    },
+    "settings": {
+      "title": "Settings",
+      "subtitle": "System settings",
+      "user-profile": {
+        "title": "User profile",
+        "subtitle": "User profile settings"
+      },
+      "access-management": {
+        "title": "Access management",
+        "subtitle": "Access management settings",
+        "groups": {
+          "title": "Groups",
+          "subtitle": "Managing groups"
+        },
+        "users": {
+          "title": "Users",
+          "subtitle": "Managing users"
+        },
+        "roles": {
+          "title": "Roles",
+          "subtitle": "Managing roles"
+        },
+        "permissions": {
+          "title": "Permissions",
+          "subtitle": "Managing permissions"
+        }
+      }
+    },
+    "not-found": {
+      "title": "Not found",
+      "subtitle": "The page not found"
+    },
+    "forbidden": {
+      "title": "Forbidden",
+      "subtitle": "Permission denied"
+    }
   },
   "validation": {
     "required": "The {field} field is required.",
