@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use InvalidArgumentException;
@@ -28,6 +29,9 @@ class AppServiceProvider extends ServiceProvider
         $this->validatePasswordValidationPolicies();
 
         $this->validateEmailValidationPolicies();
+
+        // Prevent lazy loading of models
+        Model::preventLazyLoading();
     }
 
     /**
