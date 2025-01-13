@@ -9,6 +9,18 @@
     "login": "LogiN",
     "logout": "Logout"
   },
+  "errors": {
+    "guard": {
+      "login_required": "You must be logged in to access this page.",
+      "already_logged_in": "You are already logged in.",
+      "permission_denied": "You do not have the required permissions to access this page.",
+      "i18n_not_initialized": "The i18n module has not been initialized."
+    },
+    "router": "Router Error",
+    "unknown": "Unknown error",
+    "navigation": "Navigation error occurred",
+    "unexpected": "An unexpected error occurred. Please try again later."
+  },
   "welcome": {
     "title": "Welcome page",
     "welcome_message": "Welcome to the app!"

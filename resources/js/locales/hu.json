@@ -9,6 +9,18 @@
     "login": "Bejelentkezés",
     "logout": "Kijelentkezés"
   },
+  "errors": {
+    "guard": {
+    "login_required": "Be kell jelentkezned az oldal megtekintéséhez.",
+    "already_logged_in": "Már be vagy jelentkezve.",
+    "permission_denied": "Nincs jogosultságod az oldal megtekintéséhez.",
+    "i18n_not_initialized": "Az i18n modul nincs inicializálva."
+    },
+    "router": "Útválasztási hiba",
+    "unknown": "Ismeretlen hiba",
+    "navigation": "Navigációs hiba történt",
+    "unexpected": "Váratlan hiba történt. Kérjük, próbálja meg később."
+  },
   "welcome": {
     "title": "Üdvözlő oldal",
     "welcome_message": "Üdvözöljük az alkalmazásban!"
