@@ -29,12 +29,21 @@ class AuthController extends Controller
         $user = $request->user();
         $user->tokens()->delete();
         $token = $user->createToken($request->userAgent())->plainTextToken;
+        $group = $user->groups()->first();
+
+        if (!$group) {
+            return response()->json([
+                'success' => false,
+                'message' => __('messages.group.no_group_associated_with_user'),
+            ]);
+        }
 
         return response()->json([
             'success' => true,
             'message' => 'Successfully logged in',
             'user' => $user,
             'token' => $token,
+            'group_id' => $group->id,
         ]);
     }
 

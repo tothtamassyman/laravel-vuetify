@@ -21,7 +21,10 @@ return Application::configure(basePath: dirname(__DIR__))
             'sanctum.ability' => \Laravel\Sanctum\Http\Middleware\CheckForAnyAbility::class,
         ]);
 
-        $middleware->append(\App\Http\Middleware\SetLocale::class);
+        $middleware->append([
+            \App\Http\Middleware\SetLocale::class,
+            \App\Http\Middleware\SetGroupMiddleware::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         $exceptions->render(function (ValidationException $exception, Request $request) {
