@@ -2,7 +2,6 @@
 /**
  * Import required Vue utilities and i18n.
  */
-import { defineProps, defineEmits } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 /**

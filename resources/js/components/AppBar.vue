@@ -4,7 +4,6 @@
  * Application top bar component. Handles navigation, theme toggling, and user authentication actions.
  */
 
-import {defineProps, defineEmits} from 'vue';
 import {useRouter} from 'vue-router';
 import {useAuthStore} from '@/stores/authStore.js';
 import {useThemeStore} from '@/stores/themeStore.js';

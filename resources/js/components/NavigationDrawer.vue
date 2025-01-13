@@ -2,7 +2,7 @@
 /**
  * Import required Vue utilities and external modules.
  */
-import {computed, defineProps, defineEmits, ref} from 'vue';
+import {computed, ref} from 'vue';
 import routes from '@/router/routes.js';
 import { useAuthStore } from '@/stores/authStore.js';
 import {useI18n} from 'vue-i18n';
