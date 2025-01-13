@@ -74,7 +74,9 @@ const handleResponse = (response) => {
         console.warn('Unexpected response format:', response);
     }
 
-    toast.success(`${response.data.message || 'Successful'}`);
+    if (response.data.message) {
+        toast.success(response.data.message);
+    }
 
     return response;
 };
