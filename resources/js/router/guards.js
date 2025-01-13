@@ -11,10 +11,11 @@ import { useToast } from 'vue-toastification';
  * @returns {boolean} True if i18n is initialized, otherwise false.
  */
 const ensureI18nInitialized = () => {
-    const toast = useToast();
+    const toast = useToast(); // Toast instance initialized at the top
+    const t = (key) => key; // Minimal fallback for translation keys
+
     if (!i18nInstance) {
         console.error(t('errors.guard.i18n_not_initialized'));
-        const t = (key) => key; // Minimal fallback for translation keys
         toast.warning(t('errors.guard.i18n_not_initialized'));
         return false;
     }
@@ -22,39 +23,115 @@ const ensureI18nInitialized = () => {
 };
 
 /**
+ * Fetches user data if the user is authenticated but data is missing.
+ * @param {Object} authStore - The authentication store instance.
+ * @param {Function} toast - Toast instance for notifications.
+ * @param {Function} t - Translation function.
+ * @returns {Promise<boolean>} True if the user data is fetched successfully, false otherwise.
+ */
+const fetchUserDataIfNeeded = async (authStore, toast, t) => {
+    if (authStore.isAuthenticated && !authStore.user) {
+        try {
+            await authStore.fetchUser();
+            return true;
+        } catch (error) {
+            console.error(t('errors.guard.fetch_user_failed'), error);
+            toast.error(t('errors.guard.fetch_user_failed'));
+            authStore.clearAuth(); // Clear authentication if fetching user data fails
+            return false;
+        }
+    }
+    return true;
+};
+
+/**
+ * Redirects unauthenticated users attempting to access protected routes.
+ * @param {Object} to - The target route.
+ * @param {Object} authStore - The authentication store instance.
+ * @param {Function} toast - Toast instance for notifications.
+ * @param {Function} t - Translation function.
+ * @returns {boolean} True if navigation should continue, false otherwise.
+ */
+const handleAuthentication = (to, authStore, toast, t) => {
+    const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
+
+    if (requiresAuth && !authStore.isAuthenticated) {
+        console.warn(t('errors.guard.unauthorized_access', { path: to.fullPath }));
+        toast.warning(t('errors.guard.login_required'));
+        return false;
+    }
+    return true;
+};
+
+/**
+ * Redirects authenticated users attempting to access public routes like /login.
+ * @param {Object} to - The target route.
+ * @param {Object} authStore - The authentication store instance.
+ * @param {Function} toast - Toast instance for notifications.
+ * @param {Function} t - Translation function.
+ * @returns {boolean} True if navigation should continue, false otherwise.
+ */
+const handlePublicRoute = (to, authStore, toast, t) => {
+    if (!to.meta.requiresAuth && authStore.isAuthenticated && (to.name === 'Login' || to.path === '/login')) {
+        console.warn(t('errors.guard.already_logged_in', { path: to.fullPath }));
+        toast.info(t('errors.guard.already_logged_in_toast'));
+        return false;
+    }
+    return true;
+};
+
+/**
+ * Checks user permissions for gated routes.
+ * @param {Object} to - The target route.
+ * @param {Object} authStore - The authentication store instance.
+ * @param {Function} toast - Toast instance for notifications.
+ * @param {Function} t - Translation function.
+ * @returns {boolean} True if navigation should continue, false otherwise.
+ */
+const handlePermissions = (to, authStore, toast, t) => {
+    if (to.meta.gate && authStore.hasPermission && !authStore.hasPermission(to.meta.gate)) {
+        console.warn(
+            t('errors.guard.permission_denied', {
+                gate: to.meta.gate,
+                user: authStore.user?.email || 'unknown',
+            })
+        );
+        toast.error(t('errors.guard.permission_denied_toast'));
+        return false;
+    }
+    return true;
+};
+
+/**
  * Global beforeEach navigation guard.
- * Handles authentication, permission checks, and redirections.
+ * Handles authentication, permission checks, user data fetching, and redirections.
  */
 export async function beforeEachGuard(to, from, next) {
-    const toast = useToast(); // Initialize toast instance
     if (!ensureI18nInitialized()) {
         return next(false); // Stop navigation if i18n is not initialized
     }
 
+    const toast = useToast(); // Initialize toast instance
     const t = i18nInstance.global.t; // Translation function
     const authStore = useAuthStore();
 
-    const isAuthenticated = authStore.isAuthenticated;
-    const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
+    // Fetch user data if authenticated but missing
+    if (!(await fetchUserDataIfNeeded(authStore, toast, t))) {
+        return next({ name: 'Login' }); // Redirect to login if fetching user data fails
+    }
 
     // Redirect unauthenticated users attempting to access protected routes
-    if (requiresAuth && !isAuthenticated) {
-        console.warn(`Unauthorized access attempt to: ${to.fullPath}. Redirecting to: /login`);
-        toast.warning(t('errors.guard.login_required'));
+    if (!handleAuthentication(to, authStore, toast, t)) {
         return next({ name: 'Login' });
     }
 
     // Prevent authenticated users from accessing public routes like /login
-    if (!requiresAuth && isAuthenticated && (to.name === 'Login' || to.path === '/login')) {
-        console.warn(`Authenticated user attempted to access: ${to.fullPath}. Redirecting to: /dashboard`);
-        toast.info(t('errors.guard.already_logged_in'));
+    if (!handlePublicRoute(to, authStore, toast, t)) {
         return next({ name: 'Dashboard' });
     }
 
     // Check if the user has required permissions for gated routes
-    if (to.meta.gate && authStore.hasPermission && !authStore.hasPermission(to.meta.gate)) {
-        console.warn(`Permission denied. Gate: ${to.meta.gate}, User: ${authStore.user?.email || 'unknown'}`);
-        toast.error(t('errors.guard.permission_denied'));
+    if (!handlePermissions(to, authStore, toast, t)) {
         return next({ name: 'Forbidden' });
     }
 
@@ -78,6 +155,12 @@ export function afterEachGuard(to, from) {
 
     // Log navigation details in development mode
     if (import.meta.env.MODE === 'development') {
-        console.log(`[${new Date().toISOString()}] Navigating from ${from.fullPath} to ${to.fullPath}`);
+        console.log(
+            t('logs.navigation', {
+                from: from.fullPath,
+                to: to.fullPath,
+                timestamp: new Date().toISOString(),
+            })
+        );
     }
 }

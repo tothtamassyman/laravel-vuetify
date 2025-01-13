@@ -11,15 +11,22 @@
   },
   "errors": {
     "guard": {
+      "i18n_not_initialized": "The i18n module has not been initialized.",
+      "fetch_user_failed": "Failed to fetch user data.",
       "login_required": "You must be logged in to access this page.",
-      "already_logged_in": "You are already logged in.",
-      "permission_denied": "You do not have the required permissions to access this page.",
-      "i18n_not_initialized": "The i18n module has not been initialized."
+      "unauthorized_access": "Unauthorized access attempt to: {path}.",
+      "already_logged_in": "Authenticated user attempted to access: {path}.",
+      "already_logged_in_toast": "You are already logged in.",
+      "permission_denied": "Permission denied for gate: {gate}, User: {user}.",
+      "permission_denied_toast": "You do not have permission to access this page."
     },
     "router": "Router Error",
     "unknown": "Unknown error",
     "navigation": "Navigation error occurred",
     "unexpected": "An unexpected error occurred. Please try again later."
+  },
+  "logs": {
+    "navigation": "[{timestamp}] Navigating from {from} to {to}."
   },
   "welcome": {
     "title": "Welcome page",

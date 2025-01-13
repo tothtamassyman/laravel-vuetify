@@ -11,15 +11,22 @@
   },
   "errors": {
     "guard": {
-    "login_required": "Be kell jelentkezned az oldal megtekintéséhez.",
-    "already_logged_in": "Már be vagy jelentkezve.",
-    "permission_denied": "Nincs jogosultságod az oldal megtekintéséhez.",
-    "i18n_not_initialized": "Az i18n modul nincs inicializálva."
+      "i18n_not_initialized": "Az i18n modul nincs inicializálva.",
+      "fetch_user_failed": "Nem sikerült lekérdezni a felhasználói adatokat.",
+      "login_required": "Be kell jelentkezned az oldal megtekintéséhez.",
+      "unauthorized_access": "Jogosulatlan hozzáférési kísérlet: {path}.",
+      "already_logged_in": "Hitelesített felhasználó próbált belépni: {path}.",
+      "already_logged_in_toast": "Már be vagy jelentkezve.",
+      "permission_denied": "Hozzáférés megtagadva a(z) {gate} kapuhoz. Felhasználó: {user}.",
+      "permission_denied_toast": "Nincs jogosultságod az oldal eléréséhez."
     },
     "router": "Útválasztási hiba",
     "unknown": "Ismeretlen hiba",
     "navigation": "Navigációs hiba történt",
     "unexpected": "Váratlan hiba történt. Kérjük, próbálja meg később."
+  },
+  "logs": {
+    "navigation": "[{timestamp}] Navigálás innen: {from}, ide: {to}."
   },
   "welcome": {
     "title": "Üdvözlő oldal",
