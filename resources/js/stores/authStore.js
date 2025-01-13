@@ -5,16 +5,16 @@ export const useAuthStore = defineStore('auth', {
     state: () => ({
         user: null,
         token: localStorage.getItem('token') || null,
-        // permissions: [
-        //     'view dashboard link',
-        //     'view settings link',
-        //     'view own-profile link',
-        //     'view access-management link',
-        //     'view groups link',
-        //     'view users link',
-        //     'view roles link',
-        //     'view permissions link',
-        // ],
+        permissions: [
+            'view dashboard link',
+            'view settings link',
+            'view own-profile link',
+            'view access-management link',
+            'view groups link',
+            'view users link',
+            'view roles link',
+            'view permissions link',
+        ],
     }),
 
     getters: {
@@ -72,8 +72,8 @@ export const useAuthStore = defineStore('auth', {
             }
         },
 
-        // hasPermission(permission) {
-        //     return this.permissions.includes(permission);
-        // },
+        hasPermission(permission) {
+            return this.permissions.includes(permission);
+        },
     },
 });
