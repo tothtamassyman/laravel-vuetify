@@ -39,6 +39,7 @@ const defaultStatusMessages = {
 
 const defaultCodeMessages = {
     ECONNABORTED: "Request timed out. Please try again.",
+    ERR_ABORTED: "Request was aborted. Please try again.",
     ERR_NETWORK: "Couldn't connect to the server. Please check your internet connection.",
     ERR_BAD_RESPONSE: "Invalid response from the server.",
     default: "An unexpected network error occurred.",
@@ -105,6 +106,10 @@ const handleResponseError = async (error) => {
                 break;
 
             case 'ERR_NETWORK':
+                error.message = defaultCodeMessages[error.code];
+                break;
+
+            case 'ERR_ABORTED':
                 error.message = defaultCodeMessages[error.code];
                 break;
 
