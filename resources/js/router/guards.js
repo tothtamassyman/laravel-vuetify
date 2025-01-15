@@ -121,13 +121,13 @@ const handleAbilities = (to, authStore, toast, t) => {
  * Handles authentication, permission checks, user data fetching, and redirections.
  */
 export async function beforeEachGuard(to, from, next) {
+    const authStore = useAuthStore(); // Authentication store instance
+    const toast = useToast(); // Initialize toast instance
+    const t = i18nInstance.global.t; // Translation function
+
     if (!ensureI18nInitialized()) {
         return next(false); // Stop navigation if i18n is not initialized
     }
-
-    const toast = useToast(); // Initialize toast instance
-    const t = i18nInstance.global.t; // Translation function
-    const authStore = useAuthStore();
 
     // Fetch user data if authenticated but missing
     if (!(await fetchUserDataIfNeeded(authStore, toast, t))) {
