@@ -18,8 +18,10 @@ class SetGroupMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (auth()->check()) {
-            $groupId = session('group_id');
+        $user = auth('api')->user();
+        if ($user) {
+//            $groupId = session('group_id');
+            $groupId = $user->groups()->first()->id;
 
             if (!$groupId) {
                 return response()->json([

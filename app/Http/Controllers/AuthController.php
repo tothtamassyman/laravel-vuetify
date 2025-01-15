@@ -9,6 +9,7 @@ use App\Services\AbilityService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
+//use Spatie\Permission\PermissionRegistrar;
 
 /**
  * Class AuthController
@@ -41,6 +42,9 @@ class AuthController extends Controller
         }
 
         $abilities = app(AbilityService::class)->getUserAbilities($user);
+
+//        session(['group_id' => $group->id]);
+//        app(PermissionRegistrar::class)->setPermissionsTeamId($group->id);
 
         return response()->json([
             'success' => true,
