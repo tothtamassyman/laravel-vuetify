@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\AbilitiesController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
@@ -20,6 +21,8 @@ Route::middleware(['sanctum.stateful', 'auth:sanctum'])->group(function () {
     Route::post('groups/{id}/remove-user', [GroupController::class, 'removeUser']);
     Route::post('groups/switch', [GroupController::class, 'switchGroup']);
 });
+
+Route::get('/abilities', [AbilitiesController::class, 'index']);
 
 Route::post('/login', [AuthController::class, 'login']);
 

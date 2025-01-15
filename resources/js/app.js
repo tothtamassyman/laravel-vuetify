@@ -2,8 +2,8 @@ import './bootstrap';
 
 import {createApp} from 'vue';
 import {createPinia, setActivePinia} from 'pinia';
-import { abilitiesPlugin } from '@casl/vue';
-import ability from '@/plugins/abilities.js';
+import {abilitiesPlugin} from '@casl/vue';
+import {ability, fetchAndSetAbilities} from '@/plugins/abilities.js';
 import App from './App.vue';
 import vuetify from '@/plugins/vuetify';
 import router from '@/router/index';
@@ -18,6 +18,12 @@ setActivePinia(pinia);
 
 (async () => {
     const i18n = await initI18n();
+
+    try {
+        await fetchAndSetAbilities();
+    } catch (error) {
+        console.error('Failed to fetch abilities:', error);
+    }
 
     const app = createApp(App);
 

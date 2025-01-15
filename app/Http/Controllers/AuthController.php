@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Auth\AbilitiesController;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Models\User;
+use App\Services\AbilityService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
@@ -38,10 +40,13 @@ class AuthController extends Controller
             ]);
         }
 
+        $abilities = app(AbilityService::class)->getUserAbilities($user);
+
         return response()->json([
             'success' => true,
             'message' => 'Successfully logged in',
             'user' => $user,
+            'abilities' => $abilities,
             'token' => $token,
             'group_id' => $group->id,
         ]);

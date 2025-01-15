@@ -6,6 +6,7 @@ use App\Models\Group;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Spatie\Permission\Models\Permission;
 
 class UsersSeeder extends Seeder
 {
@@ -25,6 +26,12 @@ class UsersSeeder extends Seeder
 
         if ($defaultGroup) {
             $user->groups()->attach($defaultGroup->id);
+
+            $viewLinkPermissions = Permission::where('name', 'LIKE', 'view %')->pluck('name')->toArray();
+            if($viewLinkPermissions) {
+                setPermissionsTeamId($defaultGroup->id);
+                $user->givePermissionTo($viewLinkPermissions);
+            }
         }
     }
 }
