@@ -58,7 +58,7 @@ const filteredRoutes = computed(() => {
                 if (route.meta?.requiresAuth && !authStore.isAuthenticated) return false;
 
                 // Exclude routes if the user lacks required permissions
-                // if (route.meta?.gate && !authStore.hasPermission(route.meta.gate)) return false;
+                if (route.meta?.gate && !authStore.hasAbility(route.meta.gate.action, route.meta.gate.subject)) return false;
 
                 return true; // Keep the route if it passes all checks
             })

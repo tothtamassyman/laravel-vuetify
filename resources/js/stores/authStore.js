@@ -1,20 +1,12 @@
 import {defineStore} from 'pinia';
 import axios from '@/plugins/axios';
+import ability from '@/plugins/abilities.js';
 
 export const useAuthStore = defineStore('auth', {
     state: () => ({
         user: null,
         token: localStorage.getItem('token') || null,
-        permissions: [
-            'view dashboard link',
-            'view settings link',
-            'view own-profile link',
-            'view access-management link',
-            'view groups link',
-            'view users link',
-            'view roles link',
-            'view permissions link',
-        ],
+        abilities: [],
     }),
 
     getters: {
@@ -29,6 +21,18 @@ export const useAuthStore = defineStore('auth', {
 
         setUser(user) {
             this.user = user;
+            const testAbilities = [
+                {action: 'view', subject: 'settings button'},
+                {action: 'view', subject: 'dashboard link'},
+                {action: 'view', subject: 'settings link'},
+                {action: 'view', subject: 'own-profile link'},
+                {action: 'view', subject: 'access-management link'},
+                {action: 'view', subject: 'groups link'},
+                {action: 'view', subject: 'users link'},
+                {action: 'view', subject: 'roles link'},
+                {action: 'view', subject: 'permissions link'},
+            ];
+            this.syncAbilities(testAbilities);
         },
 
         clearAuth() {
@@ -72,8 +76,13 @@ export const useAuthStore = defineStore('auth', {
             }
         },
 
-        hasPermission(permission) {
-            return this.permissions.includes(permission);
+        syncAbilities(userAbilities) {
+            this.abilities = userAbilities;
+            ability.update(userAbilities);
+        },
+
+        hasAbility(action, subject) {
+            return ability.can(action, subject);
         },
     },
 });

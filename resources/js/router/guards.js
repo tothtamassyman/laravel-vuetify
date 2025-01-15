@@ -81,21 +81,35 @@ const handlePublicRoute = (to, authStore, toast, t) => {
 };
 
 /**
- * Checks user permissions for gated routes.
+ * Checks user abilities for gated routes.
  * @param {Object} to - The target route.
  * @param {Object} authStore - The authentication store instance.
  * @param {Function} toast - Toast instance for notifications.
  * @param {Function} t - Translation function.
  * @returns {boolean} True if navigation should continue, false otherwise.
  */
-const handlePermissions = (to, authStore, toast, t) => {
-    if (to.meta.gate && authStore.hasPermission && !authStore.hasPermission(to.meta.gate)) {
-        console.warn(
-            t('errors.guard.permission_denied', {
-                gate: to.meta.gate,
+const handleAbilities = (to, authStore, toast, t) => {
+    if (!authStore) {
+        console.error(t('errors.guard.auth_store_not_found'));
+        return false;
+    }
+
+    const gate = to.meta.gate;
+    if (!gate) return true;
+
+    const { action, subject } = gate;
+    if (!authStore.hasAbility(action, subject)) {
+        const errorDetails = {
+            message: t('errors.guard.permission_denied', {
+                action,
+                subject,
                 user: authStore.user?.email || 'unknown',
-            })
-        );
+            }),
+            user: authStore.user,
+            gate,
+        };
+
+        console.warn(errorDetails.message, errorDetails);
         toast.error(t('errors.guard.permission_denied_toast'));
         return false;
     }
@@ -130,8 +144,8 @@ export async function beforeEachGuard(to, from, next) {
         return next({ name: 'Dashboard' });
     }
 
-    // Check if the user has required permissions for gated routes
-    if (!handlePermissions(to, authStore, toast, t)) {
+    // Check if the user has required abilities for gated routes
+    if (!handleAbilities(to, authStore, toast, t)) {
         return next({ name: 'Forbidden' });
     }
 

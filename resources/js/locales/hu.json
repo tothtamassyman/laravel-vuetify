@@ -27,8 +27,9 @@
       "unauthorized_access": "Jogosulatlan hozzáférési kísérlet: {path}.",
       "already_logged_in": "Hitelesített felhasználó próbált belépni: {path}.",
       "already_logged_in_toast": "Már be vagy jelentkezve.",
-      "permission_denied": "Hozzáférés megtagadva a(z) {gate} kapuhoz. Felhasználó: {user}.",
-      "permission_denied_toast": "Nincs jogosultságod az oldal eléréséhez."
+      "permission_denied": "Hozzáférés megtagadva a(z) {action} {subject} kapuhoz, felhasználó: {user}.",
+      "permission_denied_toast": "Nincs jogosultságod az oldal eléréséhez.",
+      "auth_store_not_found": "Az Auth tároló nem található."
     },
     "router": "Útválasztási hiba",
     "unknown": "Ismeretlen hiba",

@@ -27,8 +27,9 @@
       "unauthorized_access": "Unauthorized access attempt to: {path}.",
       "already_logged_in": "Authenticated user attempted to access: {path}.",
       "already_logged_in_toast": "You are already logged in.",
-      "permission_denied": "Permission denied for gate: {gate}, User: {user}.",
-      "permission_denied_toast": "You do not have permission to access this page."
+      "permission_denied": "Permission denied for gate: {action} {subject}, user: {user}.",
+      "permission_denied_toast": "You do not have permission to access this page.",
+      "auth_store_not_found": "Auth store not found."
     },
     "router": "Router Error",
     "unknown": "Unknown error",

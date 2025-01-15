@@ -2,6 +2,7 @@
 /**
  * Import required Vue utilities and i18n.
  */
+import {useAbility} from '@casl/vue';
 import { useI18n } from 'vue-i18n';
 
 /**
@@ -24,6 +25,11 @@ const props = defineProps({
         default: false,
     },
 });
+
+/**
+ * Setup CASL ability for permission checks.
+ */
+const {can} = useAbility();
 
 /**
  * Setup internationalization for translating route titles and subtitles.
@@ -51,13 +57,14 @@ const handleGroupToggle = (groupPath, isOpened) => {
     <template v-for="(route, index) in routes" :key="index">
         <!-- Render a list group if the route has children -->
         <v-list-group
-            v-if="route.children"
+            v-if="route.children && can(route.meta.gate.action, route.meta.gate.subject)"
             :value="route.path"
             @update:value="(isOpened) => handleGroupToggle(route.path, isOpened)"
         >
             <template #activator="{ props }">
                 <!-- List item for the group activator -->
                 <v-list-item
+                    v-if="can(route.meta.gate.action, route.meta.gate.subject)"
                     v-bind="props"
                     :prepend-icon="route.meta.icon"
                     :title="t(route.meta.title)"
@@ -84,7 +91,7 @@ const handleGroupToggle = (groupPath, isOpened) => {
 
         <!-- Render a simple list item if the route has no children -->
         <v-list-item
-            v-else
+            v-else-if="can(route.meta.gate.action, route.meta.gate.subject)"
             :to="route.path"
             :prepend-icon="route.meta.icon"
             :title="t(route.meta.title)"
