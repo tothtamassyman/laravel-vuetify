@@ -21,6 +21,8 @@ return Application::configure(basePath: dirname(__DIR__))
             'sanctum.ability' => \Laravel\Sanctum\Http\Middleware\CheckForAnyAbility::class,
         ]);
 
+        $middleware->prepend(\Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class);
+
         $middleware->append([
             \App\Http\Middleware\SetLocale::class,
             \App\Http\Middleware\SetGroupMiddleware::class,
