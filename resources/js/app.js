@@ -2,6 +2,8 @@ import './bootstrap';
 
 import {createApp} from 'vue';
 import {createPinia, setActivePinia} from 'pinia';
+import { abilitiesPlugin } from '@casl/vue';
+import ability from '@/plugins/abilities.js';
 import App from './App.vue';
 import vuetify from '@/plugins/vuetify';
 import router from '@/router/index';
@@ -21,6 +23,7 @@ setActivePinia(pinia);
 
     app.use(pinia);
     app.use(router);
+    app.use(abilitiesPlugin, ability);
     app.use(vuetify);
     app.use(i18n);
     app.use(Toast, toastOptions);
