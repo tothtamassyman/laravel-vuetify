@@ -7,9 +7,11 @@ use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\PermissionRegistrar;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
@@ -81,7 +83,35 @@ class User extends Authenticatable
      */
     public function groups(): BelongsToMany
     {
-        return $this->belongsToMany(Group::class, 'group_user', 'user_id', 'group_id');
+        return $this->belongsToMany(Group::class, 'group_user', 'user_id', 'group_id')->withTimestamps();
+    }
+
+    /**
+     * A model may have multiple roles.
+     */
+    public function roles(): MorphToMany
+    {
+        return $this->morphToMany(
+            config('permission.models.role'),
+            'model',
+            config('permission.table_names.model_has_roles'),
+            config('permission.column_names.model_morph_key'),
+            app(PermissionRegistrar::class)->pivotRole
+        );
+    }
+
+    /**
+     * A model may have multiple direct permissions.
+     */
+    public function permissions(): MorphToMany
+    {
+        return $this->morphToMany(
+            config('permission.models.permission'),
+            'model',
+            config('permission.table_names.model_has_permissions'),
+            config('permission.column_names.model_morph_key'),
+            app(PermissionRegistrar::class)->pivotPermission
+        );
     }
 
     /**
