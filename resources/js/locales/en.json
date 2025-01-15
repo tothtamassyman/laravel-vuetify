@@ -23,10 +23,10 @@
     "guard": {
       "i18n_not_initialized": "The i18n module has not been initialized.",
       "fetch_user_failed": "Failed to fetch user data.",
-      "login_required": "You must be logged in to access this page.",
+      "authentication_required": "You must be logged in to access this page.",
       "unauthorized_access": "Unauthorized access attempt to: {path}.",
-      "already_logged_in": "Authenticated user attempted to access: {path}.",
-      "already_logged_in_toast": "You are already logged in.",
+      "already_authenticated": "Authenticated user attempted to access: {path}.",
+      "already_authenticated_toast": "You are already logged in.",
       "permission_denied": "Permission denied for gate: {action} {subject}, user: {user}.",
       "permission_denied_toast": "You do not have permission to access this page.",
       "auth_store_not_found": "Auth store not found."

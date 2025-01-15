@@ -57,7 +57,7 @@ const handleAuthentication = (to, authStore, toast, t) => {
 
     if (requiresAuth && !authStore.isAuthenticated) {
         console.warn(t('errors.guard.unauthorized_access', { path: to.fullPath }));
-        toast.warning(t('errors.guard.login_required'));
+        toast.error(t('errors.guard.authentication_required'));
         return false;
     }
     return true;
@@ -73,8 +73,8 @@ const handleAuthentication = (to, authStore, toast, t) => {
  */
 const handlePublicRoute = (to, authStore, toast, t) => {
     if (!to.meta.requiresAuth && authStore.isAuthenticated && (to.name === 'Login' || to.path === '/login')) {
-        console.warn(t('errors.guard.already_logged_in', { path: to.fullPath }));
-        toast.info(t('errors.guard.already_logged_in_toast'));
+        console.warn(t('errors.guard.already_authenticated', { path: to.fullPath }));
+        toast.warning(t('errors.guard.already_authenticated_toast'));
         return false;
     }
     return true;

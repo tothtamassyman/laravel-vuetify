@@ -23,13 +23,12 @@
     "guard": {
       "i18n_not_initialized": "Az i18n modul nincs inicializálva.",
       "fetch_user_failed": "Nem sikerült lekérdezni a felhasználói adatokat.",
-      "login_required": "Be kell jelentkezned az oldal megtekintéséhez.",
+      "authentication_required": "Be kell jelentkezned az oldal megtekintéséhez.",
       "unauthorized_access": "Jogosulatlan hozzáférési kísérlet: {path}.",
-      "already_logged_in": "Hitelesített felhasználó próbált belépni: {path}.",
-      "already_logged_in_toast": "Már be vagy jelentkezve.",
-      "permission_denied": "Hozzáférés megtagadva a(z) {action} {subject} kapuhoz, felhasználó: {user}.",
-      "permission_denied_toast": "Nincs jogosultságod az oldal eléréséhez.",
-      "auth_store_not_found": "Az Auth tároló nem található."
+      "already_authenticated": "Hitelesített felhasználó próbált belépni: {path}.",
+      "already_authenticated_toast": "Már be vagy jelentkezve.",
+      "permission_denied": "Hozzáférés megtagadva a(z) {gate} kapuhoz. Felhasználó: {user}.",
+      "permission_denied_toast": "Nincs jogosultságod az oldal eléréséhez."
     },
     "router": "Útválasztási hiba",
     "unknown": "Ismeretlen hiba",
