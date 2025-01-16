@@ -45,6 +45,27 @@ const fetchUserDataIfNeeded = async (authStore, toast, t) => {
 };
 
 /**
+ * Fetches user abilities if the user is authenticated.
+ * @param {Object} authStore - The authentication store instance.
+ * @param {Function} toast - Toast instance for notifications.
+ *
+ * @returns {Promise<boolean>} True if the user abilities are fetched successfully, false otherwise.
+ */
+const fetchAbilities = async (authStore, toast, t) => {
+    if (authStore.isAuthenticated) {
+        try {
+            await authStore.fetchAbilities();
+            return true;
+        } catch (error) {
+            console.error(t('errors.guard.fetch_abilities_failed'), error);
+            toast.error(t('errors.guard.fetch_abilities_failed'));
+            return false;
+        }
+    }
+    return true;
+}
+
+/**
  * Redirects unauthenticated users attempting to access protected routes.
  * @param {Object} to - The target route.
  * @param {Object} authStore - The authentication store instance.
@@ -132,6 +153,11 @@ export async function beforeEachGuard(to, from, next) {
     // Fetch user data if authenticated but missing
     if (!(await fetchUserDataIfNeeded(authStore, toast, t))) {
         return next({ name: 'Login' }); // Redirect to login if fetching user data fails
+    }
+
+    // Fetch user abilities if authenticated but missing
+    if (!(await fetchAbilities(authStore, toast, t))) {
+        return next({ name: 'Login' }); // Redirect to login if fetching abilities fails
     }
 
     // Redirect unauthenticated users attempting to access protected routes
