@@ -9,6 +9,16 @@
     "login": "Bejelentkezés",
     "logout": "Kijelentkezés"
   },
+  "buttons": {
+    "ok": "OK",
+    "confirm": "Megerősít",
+    "cancel": "Mégse"
+  },
+  "dialog": {
+    "defaultTitle": "Megerősítés",
+    "defaultSubtitle": "Ez a művelet nem visszavonható.",
+    "defaultText": "Biztos benne?"
+  },
   "not-found": {
     "title": "404 - Az oldal nem található",
     "message": "A keresett oldal nem létezik.",

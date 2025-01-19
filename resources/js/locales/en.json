@@ -9,6 +9,16 @@
     "login": "Login",
     "logout": "Logout"
   },
+  "buttons": {
+    "ok": "OK",
+    "confirm": "Confirm",
+    "cancel": "Cancel"
+  },
+  "dialog": {
+    "defaultTitle": "Confirmation",
+    "defaultSubtitle": "This action cannot be undone.",
+    "defaultText": "Are you sure?"
+  },
   "not-found": {
     "title": "404 - Page Not Found",
     "message": "The page you are looking for does not exist.",
