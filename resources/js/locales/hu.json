@@ -25,6 +25,17 @@
     "title": "Törlés megerősítése",
     "text": "Biztosan törli ezt az elemet?"
   },
+  "advanced-search": {
+    "title": "Részletes keresés",
+    "subtitle": "Keresési mezők:",
+    "search": "Keresés",
+    "reset": "Visszaállítás",
+    "conditionLabel": "Keresési feltétel",
+    "andCondition": "És",
+    "orCondition": "Vagy",
+    "apply": "Alkalmaz",
+    "clear": "Törlés"
+  },
   "not-found": {
     "title": "404 - Az oldal nem található",
     "message": "A keresett oldal nem létezik.",
