@@ -12,12 +12,18 @@
   "buttons": {
     "ok": "OK",
     "confirm": "Megerősít",
+    "save": "Mentés",
+    "delete": "Törlés",
     "cancel": "Mégse"
   },
   "dialog": {
     "defaultTitle": "Megerősítés",
     "defaultSubtitle": "Ez a művelet nem visszavonható.",
     "defaultText": "Biztos benne?"
+  },
+  "dialogDelete": {
+    "title": "Törlés megerősítése",
+    "text": "Biztosan törli ezt az elemet?"
   },
   "not-found": {
     "title": "404 - Az oldal nem található",
@@ -38,7 +44,8 @@
       "already_authenticated": "Hitelesített felhasználó próbált belépni: {path}.",
       "already_authenticated_toast": "Már be vagy jelentkezve.",
       "permission_denied": "Hozzáférés megtagadva a(z) {gate} kapuhoz. Felhasználó: {user}.",
-      "permission_denied_toast": "Nincs jogosultságod az oldal eléréséhez."
+      "permission_denied_toast": "Nincs jogosultságod az oldal eléréséhez.",
+      "auth_store_not_found": "Az Auth tároló nem található."
     },
     "router": "Útválasztási hiba",
     "unknown": "Ismeretlen hiba",

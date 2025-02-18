@@ -3,7 +3,7 @@
     "label": "Language"
   },
   "app": {
-    "title": "Aplication",
+    "title": "Application",
     "welcome": "Welcome Page",
     "dashboard": "Dashboard",
     "login": "Login",
@@ -12,12 +12,18 @@
   "buttons": {
     "ok": "OK",
     "confirm": "Confirm",
+    "save": "Save",
+    "delete": "Delete",
     "cancel": "Cancel"
   },
   "dialog": {
     "defaultTitle": "Confirmation",
     "defaultSubtitle": "This action cannot be undone.",
     "defaultText": "Are you sure?"
+  },
+  "dialogDelete": {
+    "title": "Confirm deletion",
+    "text": "Are you sure you want to delete this item?"
   },
   "not-found": {
     "title": "404 - Page Not Found",
