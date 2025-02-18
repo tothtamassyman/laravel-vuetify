@@ -21,7 +21,7 @@ const vuetify = createVuetify({
             light: {
                 dark: false,
                 colors: {
-                    primary: colors.blue.lighten1,
+                    primary: colors.blue.darken1,
                     secondary: colors.grey.lighten1,
                     success: colors.green.lighten1,
                     info: colors.blue.lighten4,
