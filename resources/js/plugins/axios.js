@@ -1,6 +1,6 @@
 import axios from 'axios';
 import router from '@/router';
-import { useToast } from 'vue-toastification';
+import {useToast} from 'vue-toastification';
 
 const toast = useToast();
 
@@ -32,6 +32,7 @@ const defaultStatusMessages = {
     422: "Please check the form for errors.",
     429: "Too many requests. Please try again later.",
     403: "You're not allowed to do that.",
+    404: "Resource not found.",
     401: "Unauthorized. Please log in again.",
     500: "Internal Server Error.",
     default: "Something went wrong. Please try again later.",
@@ -124,6 +125,23 @@ const handleResponseError = async (error) => {
 
     if (status) {
         switch (status) {
+            case 401:
+                localStorage.removeItem('token');
+                const currentRoute = router.currentRoute.value;
+                if (!isSameRoute(currentRoute, '/login')) {
+                    await router.push({path: '/login'});
+                }
+                error.message = defaultStatusMessages[status];
+                break;
+
+            case 403:
+                error.message = defaultStatusMessages[status];
+                break;
+
+            case 404:
+                error.message = defaultStatusMessages[status] + ' ' + message;
+                break;
+
             case 422:
                 error.backendErrors = {};
                 for (let field in errors) {
@@ -133,20 +151,8 @@ const handleResponseError = async (error) => {
                 }
                 error.message = defaultStatusMessages[status];
                 break;
+
             case 429:
-                error.message = defaultStatusMessages[status];
-                break;
-
-            case 403:
-                error.message = defaultStatusMessages[status];
-                break;
-
-            case 401:
-                localStorage.removeItem('token');
-                const currentRoute = router.currentRoute.value;
-                if (!isSameRoute(currentRoute, '/login')) {
-                    await router.push({path: '/login'});
-                }
                 error.message = defaultStatusMessages[status];
                 break;
 
@@ -160,12 +166,12 @@ const handleResponseError = async (error) => {
                 } else if (message.includes("oci_connect(): ORA-12545:")) {
                     error.message = "Couldn't connect to Database. Please try again later.";
                 } else {
-                    error.message = defaultStatusMessages[status];
+                    error.message = defaultStatusMessages[status] + ' ' + message;
                 }
                 break;
 
             default:
-                error.message = defaultStatusMessages.default;
+                error.message = defaultStatusMessages.default + ' ' + message;
         }
     }
 
