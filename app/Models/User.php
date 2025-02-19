@@ -3,9 +3,10 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Http\Requests\Traits\Filterable;
 use Database\Factories\UserFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -17,7 +18,7 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
-    use HasApiTokens, HasFactory, HasRoles, Notifiable;
+    use HasApiTokens, HasFactory, HasRoles, Notifiable, Filterable;
 
     /**
      * The attributes that are mass assignable.
@@ -28,6 +29,36 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+    ];
+
+    /**
+     * The list of sortable fields for query filtering.
+     *
+     * @var array
+     */
+    protected static array $sortableFields = [
+        'name',
+        'email',
+    ];
+
+    /**
+     * The list of simple searchable fields for query filtering.
+     *
+     * @var array
+     */
+    protected static array $simpleSearchableFields = [
+        'name',
+        'email',
+    ];
+
+    /**
+     * The list of advanced searchable fields for query filtering.
+     *
+     * @var array
+     */
+    protected static array $advancedSearchableFields = [
+        'name',
+        'email',
     ];
 
     /**
@@ -69,21 +100,63 @@ class User extends Authenticatable
     }
 
     /**
-     * Get the details for the user.
+     * Applies filtering conditions to the query based on the provided criteria.
+     * Supports search terms, sorting, and conditional filters.
+     * The condition parameter can be 'and' or 'or' for combining filters.
+     * Returns the modified query builder instance for further chaining.
+     *
+     * @param  Builder  $query
+     * @param  array  $filters
+     * @param  string  $condition
+     * @return Builder
      */
-    public function details(): HasMany
+    public function scopeFilter(Builder $query, array $filters, string $condition = 'and'): Builder
     {
-        return $this->hasMany(UserDetail::class);
+        return $query->applyFilters(
+            $filters,
+            self::$simpleSearchableFields,
+            self::$advancedSearchableFields,
+            self::$sortableFields,
+            $condition,
+            // Custom clauses specific to the Permission model
+            function ($query, $filters, $whereMethod) {
+                if (!empty($filters['groups'])) {
+                    $query->$whereMethod(function ($q) use ($filters) {
+                        $q->whereHas('groups', function ($subQ) use ($filters) {
+                            $subQ->where('groups', 'LIKE', "%{$filters['groups']}%");
+                        });
+                    });
+                }
+                if (!empty($filters['roles'])) {
+                    $query->$whereMethod(function ($q) use ($filters) {
+                        $q->whereHas('roles', function ($subQ) use ($filters) {
+                            $subQ->where('roles', 'LIKE', "%{$filters['roles']}%");
+                        });
+                    });
+                }
+                if (!empty($filters['permissions'])) {
+                    $query->$whereMethod(function ($q) use ($filters) {
+                        $q->whereHas('permissions', function ($subQ) use ($filters) {
+                            $subQ->where('permissions', 'LIKE', "%{$filters['permissions']}%");
+                        });
+                    });
+                }
+            }
+        );
     }
 
     /**
-     * Get the groups that the user belongs to.
-     *
-     * @return BelongsToMany
+     * A model may have multiple groups.
      */
-    public function groups(): BelongsToMany
+    public function groups(): MorphToMany
     {
-        return $this->belongsToMany(Group::class, 'group_user', 'user_id', 'group_id')->withTimestamps();
+        return $this->morphToMany(
+            Group::class,
+            'model',
+            'model_has_groups',
+            'model_id',
+            'group_id'
+        )->withTimestamps();
     }
 
     /**
@@ -115,18 +188,26 @@ class User extends Authenticatable
     }
 
     /**
+     * Get the user's details relationship.
+     *
+     * @return HasMany
+     */
+    public function details(): HasMany
+    {
+        return $this->hasMany(UserDetail::class);
+    }
+
+    /**
      * Get the detail value for the given key.
      *
      * @param  string  $key
+     * @param  mixed|null  $default
      * @return string|null
      */
-    public function getDetail(string $key): ?string
+    public function getDetail(string $key, mixed $default = null): ?string
     {
         $detail = $this->details()->where('key', $key)->first();
-        if ($detail && is_scalar($detail->value)) {
-            return (string) $detail->value;
-        }
-        return null;
+        return $detail && is_scalar($detail->value) ? (string) $detail->value : $default;
     }
 
     /**
@@ -134,13 +215,46 @@ class User extends Authenticatable
      *
      * @param  string  $key
      * @param  mixed  $value
-     * @return UserDetail
+     * @return void
      */
-    public function setDetail(string $key, mixed $value): UserDetail
+    public function setDetail(string $key, mixed $value): void
     {
-        return $this->details()->updateOrCreate(
-            ['key' => $key, 'user_id' => $this->id],
-            ['value' => $value]
+        $this->details()->updateOrCreate(
+            ['key' => $key],
+            ['value' => is_scalar($value) ? (string) $value : null]
         );
+    }
+
+    /**
+     * Delete a detail by key.
+     *
+     * @param  string  $key
+     * @return void
+     */
+    public function deleteDetail(string $key): void
+    {
+        $this->details()->where('key', $key)->delete();
+    }
+
+    /**
+     * Get the default group ID.
+     *
+     * @return int|null
+    */
+    public function getDefaultGroupIdAttribute(): ?int
+    {
+        $value = $this->getDetail('default_group_id');
+        return $value !== null ? (int) $value : null;
+    }
+
+    /**
+     * Get the current group ID.
+     *
+     * @return int|null
+     */
+    public function getCurrentGroupIdAttribute(): ?int
+    {
+        $value = $this->getDetail('current_group_id');
+        return $value !== null ? (int) $value : null;
     }
 }

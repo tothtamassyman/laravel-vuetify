@@ -9,12 +9,19 @@
     "login": "Login",
     "logout": "Logout"
   },
+  "words": {
+    "all": "All",
+    "edit": "Edit",
+    "delete": "Delete"
+  },
   "buttons": {
     "ok": "OK",
     "confirm": "Confirm",
     "save": "Save",
+    "add": "Add",
     "delete": "Delete",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "reload": "Reload data"
   },
   "dialog": {
     "defaultTitle": "Confirmation",
@@ -77,7 +84,7 @@
     "submit": "Login"
   },
   "reset-password": {
-    "title": "Login",
+    "title": "Reset password",
     "email": "Email",
     "new_password": "Password",
     "password_confirmation": "Password confirmation",
@@ -85,7 +92,16 @@
   },
   "dashboard": {
     "title": "Dashboard",
-    "welcome_message": "Welcome to the dashboard!"
+    "welcome_message": "Welcome to the dashboard!",
+    "group_statistics": {
+      "v_card_title": "Group statistics",
+      "table": {
+        "thead": {
+          "group_name": "Group name",
+          "logged_in_users": "Number of logged in users"
+        }
+      }
+    }
   },
   "settings": {
     "user-profile": {
@@ -94,20 +110,152 @@
     },
     "access-management": {
       "groups": {
-        "title": "Groups",
-        "welcome_message": "Welcome to the Groups page!"
+        "toolbar-title": "Groups",
+        "searchTextFieldLabel": "Search",
+        "advancedSearchBtnText": "Advanced search",
+        "simpleSearchBtnText": "Simple search",
+        "resetSearch": "Reset search",
+        "advancedSearch": {
+          "nameTextFieldLabel": "Name",
+          "descriptionTextFieldLabel": "Description",
+          "usersTextFieldLabel": "Users"
+        },
+        "data-table": {
+          "default": {
+            "loadingText": "Loading...",
+            "noDataMessage": "No data available",
+            "perPageText": "Rows per page",
+            "reset": "Reset",
+            "search-label": "Search",
+            "headers": {
+              "name": "Name",
+              "description": "Description",
+              "users": "Users",
+              "actions": "Actions"
+            },
+            "dialog": {
+              "form-title-new": "Add new group",
+              "form-title-edit": "Edit group",
+              "nameTextFieldLabel": "Name",
+              "descriptionTextareaLabel": "Description",
+              "usersAutocompleteLabel": "Users"
+            }
+          }
+        }
       },
       "users": {
         "title": "Users",
         "welcome_message": "Welcome to the Users page!"
       },
       "roles": {
-        "title": "Roles",
-        "welcome_message": "Welcome to the Roles page!"
+        "toolbar-title": "Roles",
+        "searchTextFieldLabel": "Search",
+        "advancedSearchBtnText": "Advanced search",
+        "simpleSearchBtnText": "Simple search",
+        "resetSearch": "Reset search",
+        "advancedSearch": {
+          "nameTextFieldLabel": "Name",
+          "descriptionTextFieldLabel": "Description",
+          "guardNameSelectLabel": "Guard name",
+          "permissionSelectLabel": "Permission"
+        },
+        "data-table": {
+          "default": {
+            "loadingText": "Loading...",
+            "noDataMessage": "No data available",
+            "perPageText": "Rows per page",
+            "reset": "Reset",
+            "search-label": "Search",
+            "headers": {
+              "name": "Name",
+              "description": "Description",
+              "guardName": "Guard name",
+              "permissions": "Permissions",
+              "actions": "Actions"
+            },
+            "dialog": {
+              "form-title-new": "Add new role",
+              "form-title-edit": "Edit role",
+              "nameTextFieldLabel": "Name",
+              "descriptionTextareaLabel": "Description",
+              "guardNameSelectLabel": "Guard name",
+              "autocomplete": {
+                "noDataText": "No data available",
+                "permissionsLabel": "Permissions"
+              }
+            }
+          }
+        }
       },
       "permissions": {
-        "title": "Permissions",
-        "welcome_message": "Welcome to the Permissions page!"
+        "toolbar-title": "Permissions",
+        "searchTextFieldLabel": "Search",
+        "advancedSearchBtnText": "Advanced search",
+        "simpleSearchBtnText": "Simple search",
+        "resetSearch": "Reset search",
+        "advancedSearch": {
+          "nameTextFieldLabel": "Name",
+          "descriptionTextFieldLabel": "Description",
+          "guardNameSelectLabel": "Guard name",
+          "fieldsTextFieldLabel": "Field",
+          "conditionsTextFieldLabel": "Conditions"
+        },
+        "data-table": {
+          "default": {
+            "loadingText": "Loading...",
+            "noDataMessage": "No data available",
+            "perPageText": "Rows per page",
+            "reset": "Reset",
+            "search-label": "Search",
+            "headers": {
+              "name": "Name",
+              "description": "Description",
+              "guardName": "Guard name",
+              "fields": "Fields",
+              "conditions": "Conditions",
+              "actions": "Actions"
+            },
+            "dialog": {
+              "form-title-new": "Add new permission",
+              "form-title-edit": "Edit permission",
+              "nameTextFieldLabel": "Name",
+              "descriptionTextareaLabel": "Description",
+              "guardNameSelectLabel": "Guard name",
+              "fieldTextFieldLabel": "Field",
+              "keyTextFieldLabel": "Key",
+              "operatorTextFieldLabel": "Operator",
+              "valueTextFieldLabel": "Value"
+            }
+          },
+          "fields": {
+            "loadingText": "Loading...",
+            "noDataMessage": "No data available",
+            "perPageText": "Rows per page",
+            "toolbar": {
+              "title": "Fields"
+            },
+            "headers": {
+              "name": "Field",
+              "actions": "Actions"
+            },
+            "add-fields-error": "Please complete the current field before adding a new one."
+          },
+          "conditions": {
+            "loadingText": "Loading...",
+            "noDataMessage": "No data available",
+            "perPageText": "Rows per page",
+            "toolbar": {
+              "title": "Conditions"
+            },
+            "headers": {
+              "key": "Key",
+              "operator": "Operator",
+              "value": "Value",
+              "actions": "Actions"
+            },
+            "add-conditions-error": "Please complete the current condition before adding a new one."
+          }
+        }
       }
     }
   },

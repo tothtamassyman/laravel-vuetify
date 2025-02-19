@@ -21,9 +21,11 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         $this->call([
-            GroupsSeeder::class,
-            LinksSeeder::class,
             UsersSeeder::class,
+            GroupsSeeder::class,
+            UserGroupsSeeder::class,
+            LinksSeeder::class,
+            UserLinksSeeder::class,
         ]);
     }
 }

@@ -17,6 +17,7 @@ class GroupsSeeder extends Seeder
             'id' => 1,
             'name' => env('DEFAULT_GROUP_NAME', 'Default'),
             'description' => env('DEFAULT_GROUP_DESCRIPTION', 'Default group'),
+            'user_id' => 1,
         ]);
     }
 }

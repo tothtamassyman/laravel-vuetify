@@ -2,10 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\Permission;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
 use Spatie\Permission\PermissionRegistrar;
 
 class LinksSeeder extends Seeder
@@ -18,7 +17,7 @@ class LinksSeeder extends Seeder
         // Reset cached roles and permissions
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
-        $links = [
+        $permissions = [
             'view dashboard link',
             'view settings link',
             'view own-profile link',
@@ -29,10 +28,11 @@ class LinksSeeder extends Seeder
             'view permissions link'
         ];
 
-        foreach ($links as $link) {
+        foreach ($permissions as $permission) {
             Permission::create([
-                'name' => $link,
-                "guard_name" => "web",
+                'name' => $permission,
+                'description' => ucwords($permission),
+                "guard_name" => config('auth.defaults.guard'),
             ]);
         }
     }

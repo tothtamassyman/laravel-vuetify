@@ -9,12 +9,19 @@
     "login": "Bejelentkezés",
     "logout": "Kijelentkezés"
   },
+  "words": {
+    "all": "Mind",
+    "edit": "Szerkesztés",
+    "delete": "Törlés"
+  },
   "buttons": {
     "ok": "OK",
-    "confirm": "Megerősít",
+    "confirm": "Megerősítés",
     "save": "Mentés",
+    "add": "Hozzáadás",
     "delete": "Törlés",
-    "cancel": "Mégse"
+    "cancel": "Mégse",
+    "reload": "Adatok újratöltése"
   },
   "dialog": {
     "defaultTitle": "Megerősítés",
@@ -77,7 +84,7 @@
     "submit": "Bejelentkezés"
   },
   "reset-password": {
-    "title": "Login",
+    "title": "Jelszó visszaállítása",
     "email": "E-mail cím",
     "new_password": "Jelszó",
     "password_confirmation": "Jelszó megerősítése",
@@ -85,7 +92,16 @@
   },
   "dashboard": {
     "title": "Irányítópult",
-    "welcome_message": "Üdvözöljük az Irányítópulton!"
+    "welcome_message": "Üdvözöljük az Irányítópulton!",
+    "group_statistics": {
+      "v_card_title": "Csoportstatisztika",
+      "table": {
+        "thead": {
+          "group_name": "Csoport neve",
+          "logged_in_users": "Belépett felhasználók száma"
+        }
+      }
+    }
   },
   "settings": {
     "user-profile": {
@@ -94,20 +110,152 @@
     },
     "access-management": {
       "groups": {
-        "title": "Csoportok",
-        "welcome_message": "Üdvözöljük a Csoportok oldalon!"
+        "toolbar-title": "Jogosultságok",
+        "searchTextFieldLabel": "Keresés",
+        "advancedSearchBtnText": "Részletes keresés",
+        "simpleSearchBtnText": "Egyszerű keresés",
+        "resetSearch": "Keresés visszaállítása",
+        "advancedSearch": {
+          "nameTextFieldLabel": "Név",
+          "descriptionTextFieldLabel": "Leírás",
+          "usersTextFieldLabel": "Felhasználók"
+        },
+        "data-table": {
+          "default": {
+            "loadingText": "Betöltés...",
+            "noDataMessage": "Nincs elérhető adat",
+            "perPageText": "Sor oldalanként",
+            "reset": "Visszaállítás",
+            "search-label": "Keresés",
+            "headers": {
+              "name": "Név",
+              "description": "Leírás",
+              "users": "Felhasználók",
+              "actions": "Műveletek"
+            },
+            "dialog": {
+              "form-title-new": "Új csoport hozzáadása",
+              "form-title-edit": "Csoport szerkesztése",
+              "nameTextFieldLabel": "Név",
+              "descriptionTextareaLabel": "Leírás",
+              "usersAutocompleteLabel": "Felhasználók"
+            }
+          }
+        }
       },
       "users": {
         "title": "Felhasználók",
         "welcome_message": "Üdvözöljük a Felhasználók oldalon!"
       },
       "roles": {
-        "title": "Szerepkörök",
-        "welcome_message": "Üdvözöljük a Szerepkörök oldalon!"
+        "toolbar-title": "Szerepkörök",
+        "searchTextFieldLabel": "Keresés",
+        "advancedSearchBtnText": "Részletes keresés",
+        "simpleSearchBtnText": "Egyszerű keresés",
+        "resetSearch": "Keresés visszaállítása",
+        "advancedSearch": {
+          "nameTextFieldLabel": "Név",
+          "descriptionTextFieldLabel": "Leírás",
+          "guardNameSelectLabel": "Őr neve",
+          "permissionSelectLabel": "Jogosultság"
+        },
+        "data-table": {
+          "default": {
+            "loadingText": "Betöltés...",
+            "noDataMessage": "Nincs elérhető adat",
+            "perPageText": "Sor oldalanként",
+            "reset": "Visszaállítás",
+            "search-label": "Keresés",
+            "headers": {
+              "name": "Név",
+              "description": "Leírás",
+              "guardName": "Őr neve",
+              "permissions": "Jogosultságok",
+              "actions": "Műveletek"
+            },
+            "dialog": {
+              "form-title-new": "Új szerepkör hozzáadása",
+              "form-title-edit": "Szerepkör szerkesztése",
+              "nameTextFieldLabel": "Név",
+              "descriptionTextareaLabel": "Leírás",
+              "guardNameSelectLabel": "Őr neve",
+              "autocomplete": {
+                "noDataText": "Nincs elérhető adat",
+                "permissionsLabel": "Jogosultságok"
+              }
+            }
+          }
+        }
       },
       "permissions": {
-        "title": "Jogosultságok",
-        "welcome_message": "Üdvözöljük a Jogosultságok oldalon!"
+        "toolbar-title": "Jogosultságok",
+        "searchTextFieldLabel": "Keresés",
+        "advancedSearchBtnText": "Részletes keresés",
+        "simpleSearchBtnText": "Egyszerű keresés",
+        "resetSearch": "Keresés visszaállítása",
+        "advancedSearch": {
+          "nameTextFieldLabel": "Név",
+          "descriptionTextFieldLabel": "Leírás",
+          "guardNameSelectLabel": "Őr neve",
+          "fieldsTextFieldLabel": "Mezők",
+          "conditionsTextFieldLabel": "Feltételek"
+        },
+        "data-table": {
+          "default": {
+            "loadingText": "Betöltés...",
+            "noDataMessage": "Nincs elérhető adat",
+            "perPageText": "Sor oldalanként",
+            "reset": "Visszaállítás",
+            "search-label": "Keresés",
+            "headers": {
+              "name": "Név",
+              "description": "Leírás",
+              "guardName": "Őr neve",
+              "fields": "Mezők",
+              "conditions": "Feltételek",
+              "actions": "Műveletek"
+            },
+            "dialog": {
+              "form-title-new": "Új jogosultság hozzáadása",
+              "form-title-edit": "Jogosultság szerkesztése",
+              "nameTextFieldLabel": "Név",
+              "descriptionTextareaLabel": "Leírás",
+              "guardNameSelectLabel": "Őr neve",
+              "fieldTextFieldLabel": "Mező",
+              "keyTextFieldLabel": "Kulcs",
+              "operatorTextFieldLabel": "Operátor",
+              "valueTextFieldLabel": "Érték"
+            }
+          },
+          "fields": {
+            "loadingText": "Betöltés...",
+            "noDataMessage": "Nincs elérhető adat",
+            "perPageText": "Sor oldalanként",
+            "toolbar": {
+              "title": "Mezők"
+            },
+            "headers": {
+              "name": "Mező",
+              "actions": "Műveletek"
+            },
+            "add-fields-error": "Kérjük, töltse ki az aktuális mezőt, mielőtt újat adna hozzá."
+          },
+          "conditions": {
+            "loadingText": "Betöltés...",
+            "noDataMessage": "Nincs elérhető adat",
+            "perPageText": "Sor oldalanként",
+            "toolbar": {
+              "title": "Feltételek"
+            },
+            "headers": {
+              "key": "Kulcs",
+              "operator": "Operátor",
+              "value": "Érték",
+              "actions": "Műveletek"
+            },
+            "add-conditions-error": "Kérjük, töltse ki az aktuális feltételt, mielőtt újat adna hozzá."
+          }
+        }
       }
     }
   },
@@ -126,7 +274,7 @@
     },
     "dashboard": {
       "title": "Irányítópult",
-      "subtitle": "Ugrás az irányítópontra"
+      "subtitle": "Ugrás az irányítópultra"
     },
     "settings": {
       "title": "Beállítások",

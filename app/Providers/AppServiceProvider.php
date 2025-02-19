@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\User;
+use App\Observers\UserObserver;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
@@ -22,16 +24,22 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Force the application to use HTTPS in production
         if ($this->app->environment('production')) {
             URL::forceScheme('https');
         }
 
+        // Validate the password validation policies
         $this->validatePasswordValidationPolicies();
 
+        // Validate the email validation policies
         $this->validateEmailValidationPolicies();
 
         // Prevent lazy loading of models
         Model::preventLazyLoading();
+
+        // Register the user observer
+        User::observe(UserObserver::class);
     }
 
     /**

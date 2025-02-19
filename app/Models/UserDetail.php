@@ -45,11 +45,11 @@ class UserDetail extends Model
         parent::boot();
 
         static::creating(function ($userDetail) {
-            $this->checkIfDetailsExists($userDetail);
+            static::checkIfDetailsExists($userDetail, false);
         });
 
         static::updating(function ($userDetail) {
-            $this->checkIfDetailsExists($userDetail);
+            static::checkIfDetailsExists($userDetail, true);
         });
     }
 
@@ -57,15 +57,20 @@ class UserDetail extends Model
      * Check if the user detail exists.
      *
      * @param $userDetail
+     * @param  bool  $checkId
      * @return void
      * @throws ValidationException
      */
-    function checkIfDetailsExists($userDetail): void
+    protected static function checkIfDetailsExists($userDetail, bool $checkId = false): void
     {
-        if (self::where('user_id', $userDetail->user_id)
-            ->where('key', $userDetail->key)
-            ->where('id', '<>', $userDetail->id)
-            ->exists()) {
+        $query = self::where('user_id', $userDetail->user_id)
+            ->where('key', $userDetail->key);
+
+        if ($checkId && $userDetail->id) {
+            $query->where('id', '<>', $userDetail->id);
+        }
+
+        if ($query->exists()) {
             throw ValidationException::withMessages([
                 'key' => __('auth.user_detail_key_exists', [
                     'attribute' => $userDetail->key,

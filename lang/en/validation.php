@@ -198,6 +198,36 @@ return [
     'attributes' => [
         'email' => 'Email',
         'password' => 'Password',
+        'groups'=> [
+            'name' => 'Permission name',
+            'description' => 'Description',
+            'users' => 'Users',
+            'condition' => 'Search condition',
+        ],
+        'users' => [
+          'default_group_id' => 'Default group'
+        ],
+        'roles'=> [
+            'name' => 'Name',
+            'description' => 'Description',
+            'guard_name' => 'Guard name',
+            'permissions' => 'Permissions',
+            'condition' => 'Search condition',
+        ],
+        'permissions'=> [
+            'name' => 'Permission name',
+            'description' => 'Description',
+            'guard_name' => 'Guard name',
+            'fields' => [
+                'field' => 'Field',
+            ],
+            'conditions' => [
+                'key' => 'Key',
+                'operator' => 'Operator',
+                'value' => 'Value',
+            ],
+            'condition' => 'Search condition',
+        ],
     ],
 
 ];

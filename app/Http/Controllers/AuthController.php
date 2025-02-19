@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Auth\AbilitiesController;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Models\User;
 use App\Services\AbilityService;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
-//use Spatie\Permission\PermissionRegistrar;
+use Spatie\Permission\PermissionRegistrar;
 
 /**
  * Class AuthController
@@ -20,65 +20,64 @@ class AuthController extends Controller
     /**
      * Login
      *
-     * @param LoginRequest $request
+     * @param  LoginRequest  $request
      * @return JsonResponse
      * @throws ValidationException
      */
-    public function login(LoginRequest  $request): JsonResponse
-    {
-        $request->authenticate();
+    public function login(LoginRequest $request): JsonResponse
+{
+    $request->authenticate();
 
-        /** @var User $user */
-        $user = $request->user();
-        $user->tokens()->delete();
-        $token = $user->createToken($request->userAgent())->plainTextToken;
-        $group = $user->groups()->first();
+    /** @var User $user */
+    $user = $request->user();
+    $user->tokens()->delete();
+    $token = $user->createToken($request->userAgent())->plainTextToken;
 
-        if (!$group) {
-            return response()->json([
-                'success' => false,
-                'message' => __('messages.group.no_group_associated_with_user'),
-            ]);
-        }
-
+    try {
+        $groupId = $user->default_group_id;
+        $user->setDetail('current_group_id', $groupId);
+        app(PermissionRegistrar::class)->setPermissionsTeamId($groupId);
         $abilities = app(AbilityService::class)->getUserAbilities($user);
-
-//        session(['group_id' => $group->id]);
-//        app(PermissionRegistrar::class)->setPermissionsTeamId($group->id);
 
         return response()->json([
             'success' => true,
-            'message' => 'Successfully logged in',
-            'user' => $user,
+            'message' => __('messages.auth.login_successful'),
+            'user' => $user->load('groups'),
             'abilities' => $abilities,
             'token' => $token,
-            'group_id' => $group->id,
+            'group_id' => $groupId,
         ]);
+    } catch (Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => __('messages.auth.login_failed'),
+        ], 403);
     }
+}
 
     /**
      * Logout
      *
-     * @param Request $request
+     * @param  Request  $request
      * @return JsonResponse
      */
     public function logout(Request $request): JsonResponse
     {
         /** @var User $user */
         $user = $request->user();
-
+        $user->deleteDetail('current_group_id');
         $user->tokens()->delete();
 
         return response()->json([
             'success' => true,
-            'message' => 'Successfully logged out'
+            'message' => __('messages.auth.logout_successful'),
         ]);
     }
 
     /**
      * Get the authenticated User
      *
-     * @param Request $request
+     * @param  Request  $request
      * @return JsonResponse
      */
     public function user(Request $request): JsonResponse

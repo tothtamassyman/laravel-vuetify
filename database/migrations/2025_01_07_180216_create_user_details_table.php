@@ -17,7 +17,7 @@ return new class extends Migration {
             $table->string('value')->nullable();
             $table->timestamps();
 
-            $table->unique(['user_id', 'key', 'value'], 'user_details_uk');
+            $table->unique(['user_id', 'key'], 'user_details_uk');
         });
     }
 

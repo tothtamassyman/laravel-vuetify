@@ -198,6 +198,36 @@ return [
     'attributes' => [
         'email' => 'E-mail cím',
         'password' => 'Jelszó',
+        'groups'=> [
+            'name' => 'Név',
+            'description' => 'Leírás',
+            'users' => 'Felhasználók',
+            'condition' => 'Keresési feltétel',
+        ],
+        'users' => [
+            'default_group_id' => 'Alapértelmezett csoport'
+        ],
+        'roles'=> [
+            'name' => 'Név',
+            'description' => 'Leírás',
+            'guard_name' => 'Őr neve',
+            'permissions' => 'Jogosultság',
+            'condition' => 'Keresési feltétel',
+        ],
+        'permissions'=> [
+            'name' => 'Név',
+            'description' => 'Leírás',
+            'guard_name' => 'Őr neve',
+            'fields' => [
+                'field' => 'Mező',
+            ],
+            'conditions' => [
+                'key' => 'Kulcs',
+                'operator' => 'Operátor',
+                'value' => 'Érték',
+            ],
+            'condition' => 'Keresési feltétel',
+        ],
     ],
 
 ];
