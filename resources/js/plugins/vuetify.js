@@ -2,6 +2,7 @@ import 'vuetify/styles';
 import '@mdi/font/css/materialdesignicons.css';
 import colors from 'vuetify/lib/util/colors';
 import { createVuetify } from 'vuetify';
+import { hu, en, de, it } from 'vuetify/locale';
 import * as components from 'vuetify/components';
 import * as directives from 'vuetify/directives';
 import {aliases, mdi} from 'vuetify/iconsets/mdi';
@@ -41,6 +42,10 @@ const vuetify = createVuetify({
                 },
             },
         },
+    },
+    locale: {
+        locale: 'en',
+        messages: { hu, en, de, it },
     },
 });
 

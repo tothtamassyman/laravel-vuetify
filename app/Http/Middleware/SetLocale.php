@@ -18,12 +18,27 @@ class SetLocale
      *
      * @param Closure(Request): (Response) $next
      */
-    public function handle(Request $request, Closure $next)
-    {
-        $locale = $request->cookie('locale', LanguageHelper::getBrowserLocale());
+public function handle(Request $request, Closure $next)
+{
+    $availableLocales = config('availableLocales', []);
+    $currentLocale = app()->getLocale();
+    $cookieLocale = $request->cookie('locale');
 
+    $locale = $cookieLocale && array_key_exists($cookieLocale, $availableLocales)
+        ? $cookieLocale
+        : LanguageHelper::getBrowserLocale();
+
+    if ($locale !== $currentLocale) {
         app()->setLocale($locale);
-
-        return $next($request);
     }
+
+    $response = $next($request);
+
+    if ($cookieLocale !== $locale) {
+//        $response->withCookie(cookie('locale', $locale, 525600, null, null, true, true, false, 'none'));
+        $response->withCookie(cookie('locale', $locale, 525600));
+    }
+
+    return $response;
+}
 }

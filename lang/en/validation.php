@@ -196,16 +196,29 @@ return [
     */
 
     'attributes' => [
+        'name' => 'Name',
         'email' => 'Email',
         'password' => 'Password',
+        'password_confirmation' => 'Password confirmation',
         'groups'=> [
-            'name' => 'Permission name',
+            'name' => 'Name',
             'description' => 'Description',
             'users' => 'Users',
             'condition' => 'Search condition',
         ],
         'users' => [
-          'default_group_id' => 'Default group'
+            'groups' => [
+                'id' => 'Groups'
+            ],
+            'roles' => [
+                'id' => 'Roles'
+            ],
+            'permissions' => [
+                'id' => 'Permissions'
+            ],
+            'details' => [
+                'default_group_id' => 'Default group'
+            ],
         ],
         'roles'=> [
             'name' => 'Name',

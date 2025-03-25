@@ -1,4 +1,4 @@
-import { useI18n } from 'vue-i18n';
+import {useI18n} from 'vue-i18n';
 
 export function useValidationRules() {
     const {t} = useI18n();
@@ -22,12 +22,41 @@ export function useValidationRules() {
             return rules;
         },
 
-        emailRules: (min = 6, max = 255, field = 'Email', required = true) => {
-            let rules = [
-                v => !v || v.length >= min || t('validation.email.min', {min, field}),
-                v => !v || v.length <= max || t('validation.email.max', {max, field}),
-                v => !v || /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(v) || t('validation.email.notValid', {field}),
-            ];
+        emailRules(policy = {}, field = 'Email', required = true) {
+            let rules = [];
+
+            if (policy.min_length) {
+                rules.push(v => !v || v.length >= policy.min_length || t('validation.email.min', {
+                    min: policy.min_length,
+                    field
+                }));
+            }
+
+            if (policy.max_length) {
+                rules.push(v => !v || v.length <= policy.max_length || t('validation.email.max', {
+                    max: policy.max_length,
+                    field
+                }));
+            }
+
+            const standards = policy.validation_standards || {};
+            let emailRegex = '';
+
+            if (standards.rfc || standards.filter) {
+                emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            }
+
+            if (standards.filter_unicode) {
+                emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/u;
+            }
+
+            if (standards.strict && emailRegex) {
+                emailRegex = /^[^\s@]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)$/;
+            }
+
+            if (emailRegex) {
+                rules.push(v => !v || emailRegex.test(v) || t('validation.email.notValid', {field}));
+            }
 
             if (required) {
                 rules.unshift(v => !!v || t('validation.email.required', {field}));
@@ -36,28 +65,38 @@ export function useValidationRules() {
             return rules;
         },
 
-        urlRules(min = 4, max = 255, field = 'URL', required = true) {
-            let rules = [
-                v => !v || v.length >= min || t('validation.url.min', {min, field}),
-                v => !v || v.length <= max || t('validation.url.max', {max, field}),
-                v => !v || /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/.test(v) || t('validation.url.notValid', {field}),
-            ];
+        passwordRules(policy = {}, field = 'Password', required = true) {
+            let rules = [];
 
-            if (required) {
-                rules.unshift(v => !!v || t('validation.url.required', {field}));
+            if (policy.min_length) {
+                rules.push(v => !v || v.length >= policy.min_length || t('validation.password.min', {
+                    min: policy.min_length,
+                    field
+                }));
             }
 
-            return rules;
-        },
+            if (policy.max_length) {
+                rules.push(v => !v || v.length <= policy.max_length || t('validation.password.max', {
+                    max: policy.max_length,
+                    field
+                }));
+            }
 
-        passwordRules(min = 8, max = 255, field = 'Password', required = true) {
-            let rules = [
-                v => !v || v.length >= min || t('validation.password.min', {min, field}),
-                v => !v || v.length <= max || t('validation.password.max', {max, field}),
-                v => !v || (/[a-z]/.test(v) && /[A-Z]/.test(v)) || t('validation.password.mixed', {field}),
-                v => !v || /[0-9]/.test(v) || t('validation.password.numbers', {field}),
-                // v => !v || /[\W_]/.test(v) || t('validation.password.symbols', {field}),
-            ];
+            if (policy.mixed_case) {
+                rules.push(v => !v || (/[a-z]/.test(v) && /[A-Z]/.test(v)) || t('validation.password.mixed', {field}));
+            } else {
+                if (policy.letters) {
+                    rules.push(v => !v || /[a-zA-Z]/.test(v) || t('validation.password.letters', {field}));
+                }
+            }
+
+            if (policy.numbers) {
+                rules.push(v => !v || /[0-9]/.test(v) || t('validation.password.numbers', {field}));
+            }
+
+            if (policy.symbols) {
+                rules.push(v => !v || /[\W_]/.test(v) || t('validation.password.symbols', {field}));
+            }
 
             if (required) {
                 rules.unshift(v => !!v || t('validation.password.required', {field}));
@@ -66,15 +105,40 @@ export function useValidationRules() {
             return rules;
         },
 
-        passwordConfirmationRules(newPassword = '', min = 8, max = 255, required = true, field = 'password_confirmation', mainField = 'password') {
-            let rules = [
-                v => !v || v.length >= min || t('validation.password_confirmation.min', {min, field}),
-                v => !v || v.length <= max || t('validation.password_confirmation.max', {max, field}),
-                v => !v || (/[a-z]/.test(v) && /[A-Z]/.test(v)) || t('validation.password_confirmation.mixed', {field}),
-                v => !v || /[0-9]/.test(v) || t('validation.password_confirmation.numbers', {field}),
-                //v => !v || /[\W_]/.test(v) || t('validation.password_confirmation.symbols', {field}),
-                v => v === newPassword || t('validation.password_confirmation.notMatch', {field, mainField}),
-            ];
+        passwordConfirmationRules(newPassword = '', policy = {}, field = 'password_confirmation', mainField = 'password', required = true) {
+            let rules = [];
+
+            if (policy.min_length) {
+                rules.push(v => !v || v.length >= policy.min_length || t('validation.password_confirmation.min', {
+                    min: policy.min_length,
+                    field
+                }));
+            }
+
+            if (policy.max_length) {
+                rules.push(v => !v || v.length <= policy.max_length || t('validation.password_confirmation.max', {
+                    max: policy.max_length,
+                    field
+                }));
+            }
+
+            if (policy.mixed_case) {
+                rules.push(v => !v || (/[a-z]/.test(v) && /[A-Z]/.test(v)) || t('validation.password_confirmation.mixed', {field}));
+            } else {
+                if (policy.letters) {
+                    rules.push(v => !v || /[a-zA-Z]/.test(v) || t('validation.password_confirmation.letters', {field}));
+                }
+            }
+
+            if (policy.numbers) {
+                rules.push(v => !v || /[0-9]/.test(v) || t('validation.password_confirmation.numbers', {field}));
+            }
+
+            if (policy.symbols) {
+                rules.push(v => !v || /[\W_]/.test(v) || t('validation.password_confirmation.symbols', {field}));
+            }
+
+            rules.push(v => v === newPassword || t('validation.password_confirmation.notMatch', {field, mainField}));
 
             if (required) {
                 rules.unshift(v => !!v || t('validation.password_confirmation.required', {field}));
@@ -132,6 +196,20 @@ export function useValidationRules() {
             }
 
             return rules;
-        }
-    }
+        },
+
+        urlRules(min = 4, max = 255, field = 'URL', required = true) {
+            let rules = [
+                v => !v || v.length >= min || t('validation.url.min', {min, field}),
+                v => !v || v.length <= max || t('validation.url.max', {max, field}),
+                v => !v || /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/.test(v) || t('validation.url.notValid', {field}),
+            ];
+
+            if (required) {
+                rules.unshift(v => !!v || t('validation.url.required', {field}));
+            }
+
+            return rules;
+        },
+    };
 }

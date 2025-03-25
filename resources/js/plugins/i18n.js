@@ -3,6 +3,7 @@
  */
 import {createI18n} from 'vue-i18n';
 import {useLanguageStore} from '@/stores/languageStore.js';
+import axios from '@/plugins/axios';
 
 // Global instance for the i18n configuration
 let i18nInstance = null;
@@ -14,7 +15,7 @@ let i18nInstance = null;
  */
 const fetchAvailableLocales = async () => {
     const languageStore = useLanguageStore();
-    if (!languageStore.locales) {
+    if (!languageStore.locales || Object.keys(languageStore.locales).length === 0) {
         await languageStore.fetchLocales();
     }
     return languageStore.locales;
@@ -25,7 +26,7 @@ const defaultLocale = 'en';
 
 /**
  * Initializes the i18n instance with dynamic locale loading and configuration.
- * Determines the initial locale based on cookies, browser settings, or defaults.
+ * Fetches the initial locale from the backend or falls back to browser/default settings.
  * @returns {Object} The initialized i18n instance.
  */
 const initI18n = async () => {
@@ -40,22 +41,23 @@ const initI18n = async () => {
     const localeKeys = Object.keys(locales);
 
     /**
-     * Determines the initial locale.
-     * Checks for a saved locale in cookies, browser settings, or falls back to default.
+     * Determines the initial locale by querying the backend.
+     * Falls back to browser settings or default if the backend call fails.
      * @returns {string} The resolved locale.
      */
-    const getInitialLocale = () => {
-        const savedLocale = document.cookie
-            .split('; ')
-            .find((row) => row.startsWith('locale='))
-            ?.split('=')[1];
-
-        const browserLocale = navigator.language.split('-')[0];
-
-        if (savedLocale && localeKeys.includes(savedLocale)) {
-            return savedLocale;
+    const getInitialLocale = async () => {
+        try {
+            const response = await axios.get('/current-locale');
+            const backendLocale = response.data.locale;
+            if (localeKeys.includes(backendLocale)) {
+                return backendLocale;
+            }
+            console.warn(`Backend locale (${backendLocale}) is not supported. Falling back.`);
+        } catch (error) {
+            console.error('Failed to fetch current locale from backend:', error);
         }
 
+        const browserLocale = navigator.language.split('-')[0];
         if (localeKeys.includes(browserLocale)) {
             return browserLocale;
         }
@@ -63,11 +65,13 @@ const initI18n = async () => {
         return defaultLocale;
     };
 
+    const initialLocale = getInitialLocale();
+
     // Create the i18n instance with configuration
     i18nInstance = createI18n({
         legacy: false, // Use Composition API-based syntax
         globalInjection: true, // Make `$t` globally available in templates
-        locale: getInitialLocale(), // Initial locale
+        locale: initialLocale, // Initial locale from backend or fallback
         fallbackLocale: defaultLocale, // Fallback locale if translation is missing
         messages, // Loaded translations
         missing: (locale, key) => {
@@ -80,5 +84,5 @@ const initI18n = async () => {
 };
 
 // Export the i18n instance and initialization function
-export { i18nInstance };
+export {i18nInstance};
 export default initI18n;

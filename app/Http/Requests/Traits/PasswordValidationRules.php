@@ -46,7 +46,7 @@ trait PasswordValidationRules
     protected function passwordRules(bool $needsConfirmation = false, int $userId = null): array
     {
         // Get the password validation policies from the configuration file
-        $config = config('validationPolicies.password', []);
+        $config = config('validationPolicies.password');
 
         $rules = [];
 
@@ -56,23 +56,34 @@ trait PasswordValidationRules
         // Must be a valid string
         $rules[] = 'string';
 
-        // Initialize Password rule
-        $passwordRule = Password::min($config['min_length'])
-            ->max($config['max_length']);
+        // Ensure min_length and max_length are sensible
+        $minLength = max(8, $config['min_length']);
+        $maxLength = min(255, max($minLength, $config['max_length']));
 
-        // Conditional rules
+        // Initialize Password rule
+        $passwordRule = Password::min($minLength)
+            ->max($maxLength);
+
+        // Add mixed case if enabled, otherwise add letters
         if ($config['mixed_case']) {
             $passwordRule->mixedCase();
+        } else {
+            if ($config['letters']) {
+                $passwordRule->letters();
+            }
         }
+
+        // Add numbers if enabled
         if ($config['numbers']) {
             $passwordRule->numbers();
         }
+
+        // Add symbols if enabled
         if ($config['symbols']) {
             $passwordRule->symbols();
         }
-        if ($config['letters']) {
-            $passwordRule->letters();
-        }
+
+        // Add uncompromised check if enabled
         if ($config['uncompromised']) {
             $passwordRule->uncompromised();
         }
@@ -81,9 +92,7 @@ trait PasswordValidationRules
         $rules[] = $passwordRule;
 
         // Add history check if enabled
-        if ($config['history_check']) {
-            $rules = array_merge($rules, $this->historyRules($userId));
-        }
+        $rules = array_merge($rules, $this->historyRules($userId));
 
         // Add confirmation rule if explicitly needed
         if ($needsConfirmation) {
@@ -91,9 +100,7 @@ trait PasswordValidationRules
         }
 
         // Add current_password validation dynamically
-        if (in_array(request()->method(), ['PUT', 'PATCH'])) {
-            $rules[] = 'current_password';
-        }
+        $rules = array_merge($rules, $this->currentPasswordRule());
 
         return $rules;
     }
@@ -103,15 +110,32 @@ trait PasswordValidationRules
      * This ensures that users cannot reuse recently used passwords,
      * enhancing security by mitigating predictable password cycling.
      *
-     * Ensures users cannot reuse recently used passwords.
-     *
      * @param  int|null  $userId  The ID of the user whose password history should be validated.
      *                            If null, the history check is skipped.
      * @return array              An array containing the password history validation rule.
-     *                            Returns an empty array if no user ID is provided.
+     *                            Returns an empty array if no user ID is provided or history check is disabled.
      */
     protected function historyRules(?int $userId): array
     {
-        return $userId ? [new NotInPasswordHistory($userId)] : [];
+        $config = config('validationPolicies.password');
+        if (!$config['history_check'] || !$userId) {
+            return [];
+        }
+        return [new NotInPasswordHistory($userId)];
+    }
+
+    /**
+     * Adds validation rule to check the user's current password.
+     * This ensures that users must provide their current password during updates,
+     * enhancing security for sensitive operations.
+     *
+     * @return array An array containing the current password validation rule.
+     *               Returns an empty array if the rule does not apply.
+     */
+    protected function currentPasswordRule(): array
+    {
+        return in_array(request()->method(), ['PUT', 'PATCH']) && request()->filled('password')
+            ? ['current_password']
+            : [];
     }
 }

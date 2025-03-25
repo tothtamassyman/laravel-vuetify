@@ -15,13 +15,13 @@ class LanguageHelper
      */
     public static function getBrowserLocale(): string
     {
-        $availableLocales = config('availableLocales');
+        $availableLocales = config('availableLocales', []);
         $defaultLocale = config('app.locale', 'en');
-        $acceptLanguage = request()->server('HTTP_ACCEPT_LANGUAGE', $defaultLocale);
+        $acceptLanguage = request()->header('Accept-Language', $defaultLocale);
 
         foreach (explode(',', $acceptLanguage) as $lang) {
             $locale = substr($lang, 0, 2);
-            if (isset($availableLocales[$locale])) {
+            if (array_key_exists($locale, $availableLocales)) {
                 return $locale;
             }
         }

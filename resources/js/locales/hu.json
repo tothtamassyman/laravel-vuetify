@@ -70,6 +70,22 @@
     "navigation": "Navigációs hiba történt",
     "unexpected": "Váratlan hiba történt. Kérjük, próbálja meg később."
   },
+  "passwordPolicyToolTip": {
+    "title": "Jelszó házirend",
+    "header": "Jelszó házirend:",
+    "minimumLength": "minimális hossz:",
+    "maximumLength": "maximális hossz:",
+    "characters": "karakter",
+    "mustContain": "Kötelező tartalmaznia:",
+    "letter": "betű",
+    "lowercaseChar": "kisbetű",
+    "uppercaseChar": "nagybetű",
+    "number": "szám",
+    "specialCharacter": "speciális karakter",
+    "uncompromised": "kompromittálódott jelszó nem használható",
+    "historyCheck": "az előző {limit} jelszó nem használható",
+    "noRequirements": "Nincsenek konkrét követelmények"
+  },
   "logs": {
     "navigation": "[{timestamp}] Navigálás innen: {from}, ide: {to}."
   },
@@ -144,8 +160,51 @@
         }
       },
       "users": {
-        "title": "Felhasználók",
-        "welcome_message": "Üdvözöljük a Felhasználók oldalon!"
+        "toolbar-title": "Felhasználók",
+        "searchTextFieldLabel": "Keresés",
+        "advancedSearchBtnText": "Részletes keresés",
+        "simpleSearchBtnText": "Egyszerű keresés",
+        "resetSearch": "Keresés visszaállítása",
+        "advancedSearch": {
+          "nameTextFieldLabel": "Név",
+          "emailTextFieldLabel": "E-mail",
+          "groupsTextFieldLabel": "Csoportok",
+          "defaultGroupTextFieldLabel": "Alapértelmezett csoport",
+          "currentGroupTextFieldLabel": "Jelenlegi csoport",
+          "rolesTextFieldLabel": "Szerepkörök",
+          "permissionsTextFieldLabel": "Jogosultságok"
+        },
+        "data-table": {
+          "default": {
+            "loadingText": "Betöltés...",
+            "noDataMessage": "Nincs elérhető adat",
+            "perPageText": "Sor oldalanként",
+            "reset": "Visszaállítás",
+            "search-label": "Keresés",
+            "headers": {
+              "name": "Név",
+              "email": "E-mail",
+              "groups": "Csoportok",
+              "default_group": "Alapértelmezett csoport",
+              "current_group": "Jelenlegi csoport",
+              "roles": "Szerepkörök",
+              "permissions": "Jogosultságok",
+              "actions": "Műveletek"
+            },
+            "dialog": {
+              "form-title-new": "Új felhasználó hozzáadása",
+              "form-title-edit": "Felhasználó szerkesztése",
+              "nameTextFieldLabel": "Név",
+              "emailTextFieldLabel": "E-mail",
+              "passwordTextFieldLabel": "Jelszó",
+              "groupsAutocompleteLabel": "Csoportok",
+              "defaultGroupTextFieldLabel": "Alapértelmezett csoport",
+              "defaultGroupAutocompleteLabel": "Alapértelmezett csoport",
+              "rolesAutocompleteLabel": "Szerepkörök",
+              "permissionsAutocompleteLabel": "Jogosultságok"
+            }
+          }
+        }
       },
       "roles": {
         "toolbar-title": "Szerepkörök",
@@ -314,49 +373,51 @@
     }
   },
   "validation": {
-    "required": "A(z) {field} megadása kötelező.",
+    "required": "A(z) {field} mező megadása kötelező.",
     "name": {
-      "required": "A(z) {field} megadása kötelező.",
+      "required": "A(z) {field} mező megadása kötelező.",
       "min": "A(z) {field} nem lehet rövidebb {min} karakternél.",
       "max": "A(z) {field} nem lehet hosszabb {max} karakternél.",
       "upperLowerIncludingAccentedSpacesDotsHyphens": "A(z) {field} csak kis- és nagybetüket (beleértve az ékezetes karaktereket), pontot, szóközöket és kötőjeleket tartalmazhat."
     },
     "email": {
-      "required": "A(z) {field} megadása kötelező.",
-      "min": "A(z) {field} nem lehet rövidebb {min} karakternél.",
-      "max": "A(z) {field} nem lehet hosszabb {max} karakternél.",
-      "notValid": "A(z) {field} nem érvényes formátumú."
+      "required": "A(z) {field} mező kötelező.",
+      "min": "A(z) {field} legalább {min} karakter hosszú kell legyen.",
+      "max": "A(z) {field} nem lehet hosszabb, mint {max} karakter.",
+      "notValid": "A(z) {field} formátuma érvénytelen."
     },
     "password": {
-      "required": "A(z) {field} megadása kötelező.",
-      "min": "A(z) {field} nem lehet rövidebb {min} karakternél.",
-      "max": "A(z) {field} nem lehet hosszabb {max} karakternél.",
-      "mixed": "A(z) {field} tartalmaznia kell legalább egy kis- és egy nagybetűt.",
-      "numbers": "A(z) {field} tartalmaznia kell legalább egy számot.",
-      "symbols": "A(z) {field} tartalmaznia kell legalább egy speciális karaktert."
+      "required": "A(z) {field} mező megadása kötelező.",
+      "min": "A(z) {field} legalább {min} karakter hosszú kell legyen.",
+      "max": "A(z) {field} nem lehet hosszabb, mint {max} karakter.",
+      "mixed": "A(z) {field} kis- és nagybetűt is tartalmaznia kell.",
+      "numbers": "A(z) {field} legalább egy számot tartalmaznia kell.",
+      "symbols": "A(z) {field} legalább egy speciális karaktert tartalmaznia kell.",
+      "letters": "A(z) {field} legalább egy betűt tartalmaznia kell."
     },
     "password_confirmation": {
-      "required": "A(z) {field} megadása kötelező.",
-      "min": "A(z) {field} nem lehet rövidebb {min} karakternél.",
-      "max": "A(z) {field} nem lehet hosszabb {max} karakternél.",
-      "mixed": "A(z) {field} tartalmaznia kell legalább egy kis- és egy nagybetűt.",
-      "numbers": "A(z) {field} tartalmaznia kell legalább egy számot.",
-      "symbols": "A(z) {field} tartalmaznia kell legalább egy speciális karaktert.",
-      "notMatch": "A(z) {mainField} nem egyezik a megerősítéssel."
+      "required": "A(z) {field} mező megadása kötelező.",
+      "min": "A(z) {field} legalább {min} karakter hosszú kell legyen.",
+      "max": "A(z) {field} nem lehet hosszabb, mint {max} karakter.",
+      "mixed": "A(z) {field} kis- és nagybetűt is tartalmaznia kell.",
+      "numbers": "A(z) {field} legalább egy számot tartalmaznia kell.",
+      "symbols": "A(z) {field} legalább egy speciális karaktert tartalmaznia kell.",
+      "letters": "A(z) {field} legalább egy betűt tartalmaznia kell.",
+      "notMatch": "A(z) {field} nem egyezik a(z) {mainField} mezővel."
     },
     "length": {
-      "required": "A(z) {field} megadása kötelező.",
+      "required": "A(z) {field} mező megadása kötelező.",
       "min": "A(z) {field} nem lehet rövidebb {min} karakternél.",
       "max": "A(z) {field} nem lehet hosszabb {max} karakternél."
     },
     "number": {
-      "required": "A(z) {field} megadása kötelező.",
+      "required": "A(z) {field} mező megadása kötelező.",
       "valid": "A(z) {field} nem érvényes formátumú.",
       "min": "A(z) {field} nem lehet kisebb {min}.",
       "max": "A(z) {field} nem lehet nagyobb {max}."
     },
     "mobilePhone": {
-      "required": "A(z) {field} megadása kötelező.",
+      "required": "A(z) {field} mező megadása kötelező.",
       "notValid": "A(z) {field} nem érvényes formátumú."
     }
   }

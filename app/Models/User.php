@@ -7,7 +7,9 @@ use App\Http\Requests\Traits\Filterable;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -120,24 +122,38 @@ class User extends Authenticatable
             $condition,
             // Custom clauses specific to the Permission model
             function ($query, $filters, $whereMethod) {
+                if (!empty($filters['default_group_id'])) {
+                    $query->$whereMethod(function ($q) use ($filters) {
+                        $q->whereHas('defaultGroup', function ($subQ) use ($filters) {
+                            $subQ->where('groups.name', $filters['default_group_name']);
+                        });
+                    });
+                }
+                if (!empty($filters['current_group_id'])) {
+                    $query->$whereMethod(function ($q) use ($filters) {
+                        $q->whereHas('currentGroup', function ($subQ) use ($filters) {
+                            $subQ->where('groups.name', $filters['current_group_name']);
+                        });
+                    });
+                }
                 if (!empty($filters['groups'])) {
                     $query->$whereMethod(function ($q) use ($filters) {
                         $q->whereHas('groups', function ($subQ) use ($filters) {
-                            $subQ->where('groups', 'LIKE', "%{$filters['groups']}%");
+                            $subQ->where('groups.name', 'LIKE', "%{$filters['groups']}%");
                         });
                     });
                 }
                 if (!empty($filters['roles'])) {
                     $query->$whereMethod(function ($q) use ($filters) {
                         $q->whereHas('roles', function ($subQ) use ($filters) {
-                            $subQ->where('roles', 'LIKE', "%{$filters['roles']}%");
+                            $subQ->where('roles.name', 'LIKE', "%{$filters['roles']}%");
                         });
                     });
                 }
                 if (!empty($filters['permissions'])) {
                     $query->$whereMethod(function ($q) use ($filters) {
                         $q->whereHas('permissions', function ($subQ) use ($filters) {
-                            $subQ->where('permissions', 'LIKE', "%{$filters['permissions']}%");
+                            $subQ->where('permissions.name', 'LIKE', "%{$filters['permissions']}%");
                         });
                     });
                 }
@@ -219,9 +235,19 @@ class User extends Authenticatable
      */
     public function setDetail(string $key, mixed $value): void
     {
+        // Ha a kulcs 'default_group_id' vagy 'current_group_id', ellenőrizzük, hogy a csoport létezik-e
+//        if (in_array($key, ['default_group_id', 'current_group_id'])) {
+//            if ($value !== null && !Group::where('id', $value)->exists()) {
+//                throw new \InvalidArgumentException("A megadott csoport (ID: {$value}) nem létezik a(z) '{$key}' kulcshoz.");
+//            }
+//        }
+
         $this->details()->updateOrCreate(
             ['key' => $key],
-            ['value' => is_scalar($value) ? (string) $value : null]
+            [
+                'value' => is_scalar($value) ? (string) $value : null,
+                'user_id' => $this->id,
+            ]
         );
     }
 
@@ -237,14 +263,48 @@ class User extends Authenticatable
     }
 
     /**
+     * Get the user's default group relationship.
+     *
+     * @return HasOneThrough
+     */
+    public function defaultGroup(): HasOneThrough
+    {
+        return $this->hasOneThrough(
+            Group::class,
+            UserDetail::class,
+            'user_id',
+            'id',
+            'id',
+            'value'
+        )->where('user_details.key', 'default_group_id');
+    }
+
+    /**
      * Get the default group ID.
      *
      * @return int|null
-    */
+     */
     public function getDefaultGroupIdAttribute(): ?int
     {
         $value = $this->getDetail('default_group_id');
         return $value !== null ? (int) $value : null;
+    }
+
+    /**
+     * Get the user's current group relationship.
+     *
+     * @return HasOneThrough
+     */
+    public function currentGroup(): HasOneThrough
+    {
+        return $this->hasOneThrough(
+            Group::class,
+            UserDetail::class,
+            'user_id',
+            'id',
+            'id',
+            'value'
+        )->where('user_details.key', 'current_group_id');
     }
 
     /**

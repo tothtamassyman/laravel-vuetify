@@ -392,7 +392,8 @@ onUnmounted(() => {
                                                     :rules="lengthRules(3, 255, t('settings.access-management.roles.data-table.default.dialog.descriptionTextareaLabel'), false)"
                                                     :error-messages="backendErrors.description || []"
                                                     :label="t('settings.access-management.roles.data-table.default.dialog.descriptionTextareaLabel')"
-                                                    auto-grow
+                                                    no-resize
+                                                    :maxlength="maxLength"
                                                     counter
                                                     density="comfortable"
                                                     clearable

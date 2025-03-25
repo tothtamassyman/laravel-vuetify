@@ -40,7 +40,7 @@ class NotInPasswordHistory implements ValidationRule
      *
      * This rule checks if the provided password matches any of the user's
      * recently used passwords. The limit for password history is retrieved
-     * from the `auth.password_history_limit` configuration value.
+     * from the `validationPolicies.password.history_limit` configuration value.
      *
      * @param  string  $attribute  The name of the attribute being validated.
      * @param  mixed  $value  The value of the attribute being validated (plain text password).
@@ -50,7 +50,7 @@ class NotInPasswordHistory implements ValidationRule
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
         // Get the password history limit from the configuration
-        $historyLimit = config('auth.password_history_limit');
+        $historyLimit = config('validationPolicies.password.history_limit');
 
         // Get the last N passwords for the user
         $recentPasswords = PasswordHistory::where('user_id', $this->userId)

@@ -196,8 +196,10 @@ return [
     */
 
     'attributes' => [
+        'name' => 'Név',
         'email' => 'E-mail cím',
         'password' => 'Jelszó',
+        'password_confirmation' => 'Jelszó megerősítése',
         'groups'=> [
             'name' => 'Név',
             'description' => 'Leírás',
@@ -205,7 +207,18 @@ return [
             'condition' => 'Keresési feltétel',
         ],
         'users' => [
-            'default_group_id' => 'Alapértelmezett csoport'
+            'groups' => [
+                'id' => 'Csoportok'
+            ],
+            'roles' => [
+                'id' => 'Szerepkörök'
+            ],
+            'permissions' => [
+                'id' => 'Jogosultságok'
+            ],
+            'details' => [
+                'default_group_id' => 'Alapértelmezett csoport'
+            ],
         ],
         'roles'=> [
             'name' => 'Név',

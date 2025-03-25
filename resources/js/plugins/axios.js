@@ -51,9 +51,10 @@ axiosInstance.interceptors.request.use(
         const token = getToken();
         if (token && /^[A-Za-z0-9|]+$/.test(token)) {
             config.headers['Authorization'] = `Bearer ${token}`;
-        } else {
-            console.warn('No valid token found.');
         }
+        // } else {
+        //     console.warn('No valid token found.');
+        // }
 
         if (!config.method || typeof config.method !== 'string') {
             return Promise.reject(new Error('Invalid or missing HTTP method'));
@@ -135,11 +136,11 @@ const handleResponseError = async (error) => {
                 break;
 
             case 403:
-                error.message = defaultStatusMessages[status];
+                error.message = defaultStatusMessages[status] + '\r\n' + message;
                 break;
 
             case 404:
-                error.message = defaultStatusMessages[status] + ' ' + message;
+                error.message = defaultStatusMessages[status] + '\r\n' + message;
                 break;
 
             case 422:
@@ -149,11 +150,11 @@ const handleResponseError = async (error) => {
                         error.backendErrors[field] = errors[field][0];
                     }
                 }
-                error.message = defaultStatusMessages[status];
+                error.message = message;
                 break;
 
             case 429:
-                error.message = defaultStatusMessages[status];
+                error.message = defaultStatusMessages[status] + '\r\n' + message;
                 break;
 
             case 500:
@@ -166,12 +167,12 @@ const handleResponseError = async (error) => {
                 } else if (message.includes("oci_connect(): ORA-12545:")) {
                     error.message = "Couldn't connect to Database. Please try again later.";
                 } else {
-                    error.message = defaultStatusMessages[status] + ' ' + message;
+                    error.message = defaultStatusMessages[status] + '\r\n' + message;
                 }
                 break;
 
             default:
-                error.message = defaultStatusMessages.default + ' ' + message;
+                error.message = defaultStatusMessages.default + '\r\n' + message;
         }
     }
 

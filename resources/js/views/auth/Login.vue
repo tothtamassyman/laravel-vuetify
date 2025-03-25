@@ -1,9 +1,10 @@
 <script setup>
-import {reactive, ref} from 'vue';
+import {onMounted, reactive, ref} from 'vue';
 import {useI18n} from 'vue-i18n';
 import { useRouter } from 'vue-router';
 import {useAuthStore} from '@/stores/authStore.js';
 import {useValidationRules} from '@/utils/validationRules';
+import axios from "@/plugins/axios.js";
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -12,7 +13,9 @@ const {emailRules, passwordRules} = useValidationRules();
 
 const loginForm = ref(null);
 const email = ref('');
+const emailPolicy = ref({});
 const password = ref('');
+const passwordPolicy = ref({});
 const showPassword = ref(false);
 const loading = ref(false);
 const backendErrors = reactive({});
@@ -49,6 +52,64 @@ const login = async () => {
         }, backendErrorsTimeout.value);
     }
 };
+
+async function fetchPolicies() {
+    try {
+        const response = await axios.get('/policies');
+        passwordPolicy.value = response.data.password || {
+            min_length: 8,
+            max_length: 255,
+            mixed_case: true,
+            numbers: true,
+            symbols: true,
+            letters: false,
+            uncompromised: true,
+            history_check: true,
+            history_limit: 10,
+        };
+        emailPolicy.value = response.data.email || {
+            min_length: 6,
+            max_length: 255,
+            validation_standards: {
+                rfc: true,
+                strict: false,
+                dns: true,
+                spoof: true,
+                filter: true,
+                filter_unicode: false,
+            },
+        };
+    } catch (error) {
+        console.error('Error fetching policies:', error);
+        passwordPolicy.value = {
+            min_length: 8,
+            max_length: 255,
+            mixed_case: true,
+            numbers: true,
+            symbols: true,
+            letters: false,
+            uncompromised: true,
+            history_check: true,
+            history_limit: 10,
+        };
+        emailPolicy.value = {
+            min_length: 6,
+            max_length: 255,
+            validation_standards: {
+                rfc: true,
+                strict: false,
+                dns: true,
+                spoof: true,
+                filter: true,
+                filter_unicode: false,
+            },
+        };
+    }
+}
+
+onMounted(async () => {
+    await fetchPolicies();
+});
 </script>
 
 <template>
@@ -67,7 +128,7 @@ const login = async () => {
                             ref="emailInput"
                             v-model="email"
                             :label="t('login.email')"
-                            :rules="emailRules(6,255,t('login.email'))"
+                            :rules="emailRules(emailPolicy, t('login.email'))"
                             :error-messages="backendErrors.email || []"
                             type="text"
                             clearable
@@ -83,7 +144,7 @@ const login = async () => {
                             ref="passwordInput"
                             v-model="password"
                             :label="t('login.password')"
-                            :rules="passwordRules(8, 255, t('login.password'))"
+                            :rules="passwordRules(passwordPolicy, t('login.password'))"
                             :error-messages="backendErrors.password || []"
                             :append-inner-icon="showPassword ? 'mdi-eye-off' : 'mdi-eye'"
                             :type="showPassword ? 'text' : 'password'"

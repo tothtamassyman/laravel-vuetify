@@ -2,8 +2,6 @@
 
 namespace App\Providers;
 
-use App\Models\User;
-use App\Observers\UserObserver;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
@@ -37,9 +35,6 @@ class AppServiceProvider extends ServiceProvider
 
         // Prevent lazy loading of models
         Model::preventLazyLoading();
-
-        // Register the user observer
-        User::observe(UserObserver::class);
     }
 
     /**

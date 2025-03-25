@@ -38,7 +38,7 @@ const headers = computed(() => [
     {title: t('settings.access-management.groups.data-table.default.headers.name'), key: 'name'},
     {title: t('settings.access-management.groups.data-table.default.headers.description'), key: 'description'},
     {title: t('settings.access-management.groups.data-table.default.headers.users'), key: 'users', sortable: false},
-    {title: t('settings.access-management.groups.data-table.default.headers.actions'), key: 'actions', sortable: false}
+    {title: t('settings.access-management.groups.data-table.default.headers.actions'), key: 'actions', sortable: false},
 ]);
 
 const items = ref([]);
@@ -71,19 +71,16 @@ const createPagination = (items = null) => {
         itemsPerPageOptions: computed(() => {
             const count = items ? (items?.length ?? 0) : pagination.value.default.itemsLength;
             const baseOptions = [5, 10, 25, 50, 100];
-
             const filteredOptions = baseOptions
                 .filter(opt => opt < count)
                 .map(opt => ({
                     value: opt,
-                    title: opt.toString()
+                    title: opt.toString(),
                 }));
-
             filteredOptions.push({
                 value: -1,
-                title: t('words.all')
+                title: t('words.all'),
             });
-
             return filteredOptions;
         }),
         page: 1,
@@ -137,9 +134,8 @@ async function fetchItems() {
         }
 
         const response = await axios.get('/groups', {params});
-
         items.value = response.data.data || [];
-        pagination.value.default.itemsLength = response.data.pagination.total || 0;
+        pagination.value.default.itemsLength = response.data.pagination?.total || 0;
     } catch (error) {
         console.error('Error fetching groups:', error);
     } finally {
@@ -193,7 +189,6 @@ const deleteItemConfirm = async () => {
     try {
         await axios.delete(`/groups/${editedItem.value.id}`);
         items.value = items.value.filter(item => item.id !== editedItem.value.id);
-
         pagination.value.default.itemsLength--;
 
         if (items.value.length === 0 && pagination.value.default.page > 1) {
@@ -295,9 +290,7 @@ onUnmounted(() => {
     >
         <template v-slot:top>
             <v-toolbar flat>
-                <v-toolbar-title
-                        class="text-primary"
-                >
+                <v-toolbar-title class="text-primary">
                     {{ t('settings.access-management.groups.toolbar-title') }}
                 </v-toolbar-title>
                 <v-spacer/>
@@ -318,7 +311,7 @@ onUnmounted(() => {
                         density="compact"
                         hide-details
                         outlined
-                ></v-text-field>
+                />
 
                 <v-spacer/>
 
@@ -337,6 +330,7 @@ onUnmounted(() => {
                         append-icon="mdi-refresh"
                         color="primary"
                 />
+
                 <v-dialog v-model="dialog" max-width="950px" persistent>
                     <template v-slot:activator="{ props }">
                         <v-btn
@@ -384,7 +378,8 @@ onUnmounted(() => {
                                                     :rules="lengthRules(3, 255, t('settings.access-management.groups.data-table.default.dialog.descriptionTextareaLabel'), false)"
                                                     :error-messages="backendErrors.description || []"
                                                     :label="t('settings.access-management.groups.data-table.default.dialog.descriptionTextareaLabel')"
-                                                    auto-grow
+                                                    no-resize
+                                                    :maxlength="maxLength"
                                                     counter
                                                     density="comfortable"
                                                     clearable
@@ -434,7 +429,7 @@ onUnmounted(() => {
                             </v-card-text>
 
                             <v-card-actions>
-                                <v-spacer></v-spacer>
+                                <v-spacer/>
                                 <ConfirmCancelButtons
                                         @confirm="save"
                                         @cancel="close"
@@ -445,6 +440,7 @@ onUnmounted(() => {
                         </v-card>
                     </v-form>
                 </v-dialog>
+
                 <confirmation-dialog
                         v-model="dialogDelete"
                         max-width="500px"

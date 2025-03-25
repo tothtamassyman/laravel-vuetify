@@ -17,7 +17,11 @@ return [
         "no_group_associated_with_user" => "Nincs csoport a felhasználóhoz rendelve",
     ],
     "user" => [
-        "default_group_id_required_on_create'" => "Nem hozhat létre felhasználót alapértelmezett csoport nélkül.",
+        "created" => "Felhasználó sikeresen létrehozva.",
+        "updated" => "Felhasználó sikeresen frissítve.",
+        "deleted" => "Felhasználó sikeresen törölve.",
+        "cannot_delete_yourself" => "Nem törölheti önmagát.",
+        "default_group_id_required_on_create" => "Nem hozhat létre felhasználót alapértelmezett csoport nélkül.",
         "default_group_id_required_on_update" => "Nem frissítheti a felhasználót alapértelmezett csoport nélkül.",
     ],
     "permission" => [

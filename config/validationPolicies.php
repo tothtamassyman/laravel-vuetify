@@ -66,6 +66,9 @@ return [
 
         // Enforce password history check to prevent reuse of recent passwords (default: true)
         'history_check' => filter_var(env('PASSWORD_POLICIES_HISTORY_CHECK', true), FILTER_VALIDATE_BOOLEAN),
+
+        // Password history limit (number of previous passwords stored) (default: 10)
+        'history_limit' => (int) env('PASSWORD_POLICIES_HISTORY_LIMIT', 10),
     ],
 
     /*

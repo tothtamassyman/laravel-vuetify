@@ -19,12 +19,18 @@ return Application::configure(basePath: dirname(__DIR__))
             'sanctum.stateful' => \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             'sanctum.abilities' => \Laravel\Sanctum\Http\Middleware\CheckAbilities::class,
             'sanctum.ability' => \Laravel\Sanctum\Http\Middleware\CheckForAnyAbility::class,
+            'setlocale' => \App\Http\Middleware\SetLocale::class,
         ]);
 
-        $middleware->prepend(\Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class);
+        $middleware->api([
+            'setlocale',
+        ]);
+
+        $middleware->prepend([
+            \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+        ]);
 
         $middleware->append([
-            \App\Http\Middleware\SetLocale::class,
             \App\Http\Middleware\SetGroupMiddleware::class,
         ]);
     })

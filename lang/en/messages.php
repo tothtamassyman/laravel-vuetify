@@ -17,7 +17,11 @@ return [
         "no_group_associated_with_user" => "No group associated with user",
     ],
     "user" => [
-        "default_group_id_required_on_create'" => "Cannot create user without a default group.",
+        "created" => "User created successfully.",
+        "updated" => "User updated successfully.",
+        "deleted" => "User deleted successfully.",
+        "cannot_delete_yourself" => "Cannot delete yourself.",
+        "default_group_id_required_on_create" => "Cannot create user without a default group.",
         "default_group_id_required_on_update" => "Default group cannot be unset.",
     ],
     "permission" => [

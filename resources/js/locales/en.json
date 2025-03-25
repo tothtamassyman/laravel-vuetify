@@ -70,6 +70,22 @@
     "navigation": "Navigation error occurred",
     "unexpected": "An unexpected error occurred. Please try again later."
   },
+  "passwordPolicyToolTip": {
+    "title": "Password policy",
+    "header": "Password policy:",
+    "minimumLength": "minimum length:",
+    "maximumLength": "maximum length:",
+    "characters": "characters",
+    "mustContain": "Must contain:",
+    "letter": "letter",
+    "lowercaseChar": "lowercase character",
+    "uppercaseChar": "uppercase character",
+    "number": "number",
+    "specialCharacter": "special character",
+    "uncompromised": "uncompromised password",
+    "historyCheck": "the previous {limit} passwords cannot be used",
+    "noRequirements": "No specific requirements"
+  },
   "logs": {
     "navigation": "[{timestamp}] Navigating from {from} to {to}."
   },
@@ -144,8 +160,51 @@
         }
       },
       "users": {
-        "title": "Users",
-        "welcome_message": "Welcome to the Users page!"
+        "toolbar-title": "Users",
+        "searchTextFieldLabel": "Search",
+        "advancedSearchBtnText": "Advanced search",
+        "simpleSearchBtnText": "Simple search",
+        "resetSearch": "Reset search",
+        "advancedSearch": {
+          "nameTextFieldLabel": "Name",
+          "emailTextFieldLabel": "Email",
+          "groupsTextFieldLabel": "Groups",
+          "defaultGroupTextFieldLabel": "Default group",
+          "currentGroupTextFieldLabel": "Current group",
+          "rolesTextFieldLabel": "Roles",
+          "permissionsTextFieldLabel": "Permissions"
+        },
+        "data-table": {
+          "default": {
+            "loadingText": "Loading...",
+            "noDataMessage": "No data available",
+            "perPageText": "Rows per page",
+            "reset": "Reset",
+            "search-label": "Search",
+            "headers": {
+              "name": "Name",
+              "email": "Email",
+              "groups": "Groups",
+              "default_group": "Default group",
+              "current_group": "Current group",
+              "roles": "Roles",
+              "permissions": "Permissions",
+              "actions": "Actions"
+            },
+            "dialog": {
+              "form-title-new": "Add new user",
+              "form-title-edit": "Edit user",
+              "nameTextFieldLabel": "Name",
+              "emailTextFieldLabel": "Email",
+              "passwordTextFieldLabel": "Password",
+              "groupsAutocompleteLabel": "Groups",
+              "defaultGroupTextFieldLabel": "Default group",
+              "defaultGroupAutocompleteLabel": "Default group",
+              "rolesAutocompleteLabel": "Roles",
+              "permissionsAutocompleteLabel": "Permissions"
+            }
+          }
+        }
       },
       "roles": {
         "toolbar-title": "Roles",
@@ -323,26 +382,28 @@
     },
     "email": {
       "required": "The {field} field is required.",
-      "min": "The {field} field cannot be shorter than {min} characters.",
-      "max": "The {field} field cannot be longer than {max} characters.",
-      "notValid": "The {field} field is not valid."
+      "min": "The {field} must be at least {min} characters long.",
+      "max": "The {field} must not exceed {max} characters.",
+      "notValid": "The {field} format is invalid."
     },
     "password": {
       "required": "The {field} field is required.",
-      "min": "The {field} field cannot be shorter than {min} characters.",
-      "max": "The {field} field cannot be longer than {max} characters.",
-      "mixed": "The {field} field must contain at least one lowercase and one uppercase letter.",
-      "numbers": "The {field} field must contain at least one number.",
-      "symbols": "The {field} field must contain at least one special character."
+      "min": "The {field} must be at least {min} characters long.",
+      "max": "The {field} must not exceed {max} characters.",
+      "mixed": "The {field} must contain both lowercase and uppercase letters.",
+      "numbers": "The {field} must contain at least one number.",
+      "symbols": "The {field} must contain at least one special character.",
+      "letters": "The {field} must contain at least one letter."
     },
     "password_confirmation": {
       "required": "The {field} field is required.",
-      "min": "The {field} field cannot be shorter than {min} characters.",
-      "max": "The {field} field cannot be longer than {max} characters.",
-      "mixed": "The {field} field must contain at least one lowercase and one uppercase letter.",
-      "numbers": "The {field} field must contain at least one number.",
-      "symbols": "The {field} field must contain at least one special character.",
-      "notMatch": "The {mainField} field does not match confirmation."
+      "min": "The {field} must be at least {min} characters long.",
+      "max": "The {field} must not exceed {max} characters.",
+      "mixed": "The {field} must contain both lowercase and uppercase letters.",
+      "numbers": "The {field} must contain at least one number.",
+      "symbols": "The {field} must contain at least one special character.",
+      "letters": "The {field} must contain at least one letter.",
+      "notMatch": "The {field} does not match the {mainField}."
     },
     "length": {
       "required": "The {field} field is required.",
